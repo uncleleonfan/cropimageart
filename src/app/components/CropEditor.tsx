@@ -630,7 +630,7 @@ export default function CropEditor() {
               {image.naturalWidth} × {image.naturalHeight}
               <span className="text-zinc-600">·</span>
               <span className="text-zinc-500">裁切</span>
-              <span className="text-white">
+              <span className="inline-block w-[72px] text-white">
                 {initialized ? `${Math.round(crop.width * getScale())} × ${Math.round(crop.height * getScale())}` : '—'}
               </span>
             </span>
