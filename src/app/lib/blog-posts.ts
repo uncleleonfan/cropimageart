@@ -15,6 +15,9 @@ export interface BlogPost {
   intro: string;
   sections: BlogSection[];
   tips: string[];
+  exampleImage: string;
+  exampleImageCaption: string;
+  exampleImageCredit: string;
 }
 
 export const blogPosts: BlogPost[] = [
@@ -48,6 +51,12 @@ export const blogPosts: BlogPost[] = [
       "街拍：将视觉焦点（行人、招牌）置于交点处",
       "社交媒体：Instagram 4:5 比例 + 三分法 = 绝佳组合",
     ],
+    exampleImage:
+      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&h=533&fit=crop&q=80",
+    exampleImageCaption:
+      "经典的约塞米蒂山谷——将地平线放在下三分之一线，山谷主峰落在右侧竖向三分线上，形成了教科书级的三分法构图",
+    exampleImageCredit:
+      "Photo by Nathan Anderson / Unsplash",
   },
 
   // ─── 2. Golden Ratio ──────────────────────────────
@@ -80,6 +89,12 @@ export const blogPosts: BlogPost[] = [
       "风景中让精彩的部分占画面 62%",
       "与黄金螺旋配合使用效果更佳",
     ],
+    exampleImage:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=533&fit=crop&q=80",
+    exampleImageCaption:
+      "古典柱廊——柱子间距与立面的整体比例接近 φ (1.618)，主体区域占据约 62%，留白区域占约 38%",
+    exampleImageCredit:
+      "Photo by Spencer Davis / Unsplash",
   },
 
   // ─── 3. Golden Spiral ─────────────────────────────
@@ -112,6 +127,12 @@ export const blogPosts: BlogPost[] = [
       "自然风景（河流、山脉）是螺旋构图的天然素材",
       "可以旋转/翻转螺旋来匹配照片内容",
     ],
+    exampleImage:
+      "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=800&h=533&fit=crop&q=80",
+    exampleImageCaption:
+      "螺旋楼梯——自然界和人造物中都能找到完美的斐波那契螺旋，视线顺着台阶逐级流转，最终落于螺旋中心",
+    exampleImageCredit:
+      "Photo by Ben Kolde / Unsplash",
   },
 
   // ─── 4. Diagonal Method ───────────────────────────
@@ -144,6 +165,12 @@ export const blogPosts: BlogPost[] = [
       "两条对角线交叉处是画面最引人注目的位置",
       "与三角形构图配合效果更好",
     ],
+    exampleImage:
+      "https://images.unsplash.com/photo-1469474968028-56623f3a0fe1?w=800&h=533&fit=crop&q=80",
+    exampleImageCaption:
+      "林间小道——道路从右下角斜穿画面至左上角，形成一条强烈的对角线，将视线从前景引向远方",
+    exampleImageCredit:
+      "Photo by Paul Gilmore / Unsplash",
   },
 
   // ─── 5. Triangle ───────────────────────────────────
@@ -176,6 +203,12 @@ export const blogPosts: BlogPost[] = [
       "底边要「重」，顶点要「轻」",
       "群体人像的天然选择",
     ],
+    exampleImage:
+      "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&h=533&fit=crop&q=80",
+    exampleImageCaption:
+      "山峰轮廓天然形成正三角形——底边宽厚稳重（山脚），顶点尖锐挺拔（山顶），给人庄严、不朽的纪念碑式感受",
+    exampleImageCredit:
+      "Photo by Kalen Emsley / Unsplash",
   },
 
   // ─── 6. Center Cross ──────────────────────────────
@@ -208,6 +241,12 @@ export const blogPosts: BlogPost[] = [
       "人物直视镜头的肖像首选中央位置",
       "配合对称网格使用效果翻倍",
     ],
+    exampleImage:
+      "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&h=533&fit=crop&q=80",
+    exampleImageCaption:
+      "建筑内部中庭——拱门顶端恰好落在画面垂直中线上，水平中线穿过拱门的视觉重心，形成强有力的中心十字",
+    exampleImageCredit:
+      "Photo by Drew Hays / Unsplash",
   },
 
   // ─── 7. Phi Grid ──────────────────────────────────
@@ -240,6 +279,12 @@ export const blogPosts: BlogPost[] = [
       "只选择最相关的 2-3 条线对齐，不必全部使用",
       "外侧极窄带可做「安全修剪」参考",
     ],
+    exampleImage:
+      "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=800&h=533&fit=crop&q=80",
+    exampleImageCaption:
+      "山间湖泊——多层次的水平线（湖面、远山、天空）可以分别对齐 Phi 网格的不同分割线，创造出精准的视觉层次",
+    exampleImageCredit:
+      "Photo by Lukasz Szmigiel / Unsplash",
   },
 
   // ─── 8. Symmetry ──────────────────────────────────
@@ -268,6 +313,12 @@ export const blogPosts: BlogPost[] = [
       "确保中轴线两侧宽度像素完全一致",
       "数学对称 ≠ 视觉对称，注意色彩和亮度平衡",
     ],
+    exampleImage:
+      "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=800&h=533&fit=crop&q=80",
+    exampleImageCaption:
+      "对称走廊——左右完全镜像是反射对称的极致体现，中轴线两侧的拱门、柱子和光影几乎完全一致",
+    exampleImageCredit:
+      "Photo by Benjamin Child / Unsplash",
   },
 
   // ─── 9. Quarters ──────────────────────────────────
@@ -300,6 +351,12 @@ export const blogPosts: BlogPost[] = [
       "复杂地平线 — 多条水平线分层对齐",
       "中心线加粗 — 随时验证是否需要中央构图",
     ],
+    exampleImage:
+      "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=533&fit=crop&q=80",
+    exampleImageCaption:
+      "城市街景——多层次的建筑轮廓、街道和天空可以在 4×4 网格中找到多条对齐参考线，帮助精确放置每个视觉元素",
+    exampleImageCredit:
+      "Photo by Chuttersnap / Unsplash",
   },
 
   // ─── 10. Radiating ─────────────────────────────────
@@ -332,6 +389,12 @@ export const blogPosts: BlogPost[] = [
       "裁掉切割放射线的横向元素",
       "与引导线构图混合使用效果极佳",
     ],
+    exampleImage:
+      "https://images.unsplash.com/photo-1578474846511-04ba529f0b88?w=800&h=533&fit=crop&q=80",
+    exampleImageCaption:
+      "教堂穹顶——从中心向外辐射的线条将视线强制拉向汇聚点，完美展示了放射线构图的视觉凝聚力",
+    exampleImageCredit:
+      "Photo by Chris Barbalis / Unsplash",
   },
 
   // ─── 11. Leading Lines ─────────────────────────────
@@ -364,6 +427,12 @@ export const blogPosts: BlogPost[] = [
       "移除路径上的干扰物，保持线路干净",
       "横构图加强横向引导，竖构图加强纵向引导",
     ],
+    exampleImage:
+      "https://images.unsplash.com/photo-1478860409698-8707f313ee8b?w=800&h=533&fit=crop&q=80",
+    exampleImageCaption:
+      "铁路延伸到远方——铁轨作为自然界最强的引导线之一，从画面左下角一路将视线拉向远方的消失点",
+    exampleImageCredit:
+      "Photo by Sergey Pesterev / Unsplash",
   },
 
   // ─── 12. S-Curve ──────────────────────────────────
@@ -396,6 +465,12 @@ export const blogPosts: BlogPost[] = [
       "两侧保留留白，别裁太紧",
       "向上 S = 上升感，向下 S = 沉静感",
     ],
+    exampleImage:
+      "https://images.unsplash.com/photo-1542224566-6e85f2ff6776?w=800&h=533&fit=crop&q=80",
+    exampleImageCaption:
+      "盘山公路——蜿蜒的 S 形道路让视线缓缓游走，每一个弯道都是一次视觉节奏的转变，充满韵律感",
+    exampleImageCredit:
+      "Photo by Mantas Hesthaven / Unsplash",
   },
 
   // ─── 13. X-Composition ─────────────────────────────
@@ -424,6 +499,12 @@ export const blogPosts: BlogPost[] = [
       "适合对比式内容 — 明/暗、动/静、多/少",
       "可以微旋转来让建筑线对齐 X 对角线",
     ],
+    exampleImage:
+      "https://images.unsplash.com/photo-1523531294919-4bcd7c65e216?w=800&h=533&fit=crop&q=80",
+    exampleImageCaption:
+      "斜拉桥钢索——多根钢索在画面中相交，形成天然的 X 形张力结构，交叉点成为画面最强焦点",
+    exampleImageCredit:
+      "Photo by Marten Bjork / Unsplash",
   },
 
   // ─── 14. L-Shape ─────────────────────────────────
@@ -456,6 +537,12 @@ export const blogPosts: BlogPost[] = [
       "开口方向必须朝向主体",
       "长短边比例可匹配画幅方向",
     ],
+    exampleImage:
+      "https://images.unsplash.com/photo-1503174971373-b1f69850bded?w=800&h=533&fit=crop&q=80",
+    exampleImageCaption:
+      "拱门框景——门框的左侧竖边与顶部横边构成天然 L 形框架，将内部庭院景观「包裹」其中",
+    exampleImageCredit:
+      "Photo by Raphael Lopes / Unsplash",
   },
 
   // ─── 15. Circular ────────────────────────────────
@@ -488,6 +575,12 @@ export const blogPosts: BlogPost[] = [
       "裁掉圆形外的干扰元素",
       "圆窗、盘子、泡泡阵列是天然素材",
     ],
+    exampleImage:
+      "https://images.unsplash.com/photo-1495567720989-cebdbdd97913?w=800&h=533&fit=crop&q=80",
+    exampleImageCaption:
+      "圆形穹顶——同心圆结构将视线囚禁在圆形之中，形成自成一体的封闭视觉世界",
+    exampleImageCredit:
+      "Photo by Krisztian Tabori / Unsplash",
   },
 
   // ─── 16. Cinematic ────────────────────────────────
@@ -520,6 +613,12 @@ export const blogPosts: BlogPost[] = [
       "上下遮幅帮你做减法 — 隐藏不好看的区域",
       "在 Instagram 上使用 1.91:1 可以获得最大的预览面积",
     ],
+    exampleImage:
+      "https://images.unsplash.com/photo-1506197603052-3cc9c3a201bd?w=800&h=533&fit=crop&q=80",
+    exampleImageCaption:
+      "壮阔的自然景观——宽幅的天然视野非常适合 2.35:1 电影画幅裁剪，横向空间足以讲述一个完整的故事",
+    exampleImageCredit:
+      "Photo by Andreas Gucklhorn / Unsplash",
   },
 
   // ─── 17. Dynamic Symmetry ──────────────────────────
@@ -553,6 +652,12 @@ export const blogPosts: BlogPost[] = [
       "先从三分法和黄金比例开始，再进阶到动态对称",
       "适合需要「高级感」和「不露痕迹的规则感」的场景",
     ],
+    exampleImage:
+      "https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=800&h=533&fit=crop&q=80",
+    exampleImageCaption:
+      "古典建筑立面——基于 √2 比例的分割线和对角线构成动态对称系统，局部充满不对称的张力而整体高度和谐",
+    exampleImageCredit:
+      "Photo by Brunno Castello / Unsplash",
   },
 ];
 

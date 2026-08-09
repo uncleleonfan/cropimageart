@@ -64,6 +64,29 @@ export default function BlogPostPage() {
           {post.intro}
         </div>
 
+        {/* Example Photo */}
+        {post.exampleImage && (
+          <div className="mb-10">
+            <div className="rounded-xl overflow-hidden border border-zinc-800/60">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={post.exampleImage}
+                alt={`${post.title} 示例照片`}
+                className="w-full h-auto"
+                loading="lazy"
+              />
+            </div>
+            <div className="flex items-start justify-between mt-3 gap-4">
+              <p className="text-sm text-zinc-400">
+                {post.exampleImageCaption}
+              </p>
+              <span className="text-[10px] text-zinc-600 flex-shrink-0 mt-0.5">
+                {post.exampleImageCredit}
+              </span>
+            </div>
+          </div>
+        )}
+
         {/* Grid Diagram */}
         <div className="mb-10">
           <GridDiagram type={post.compositionType} />
