@@ -2,9 +2,11 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { AspectRatio, CompositionType, CropRect } from "../lib/types";
-import { ASPECT_RATIO_VALUES, COMPOSITION_LABELS } from "../lib/types";
+import { ASPECT_RATIO_VALUES } from "../lib/types";
 import CompositionGrid from "./CompositionGrid";
 import { useEditor } from "./EditorProvider";
+import { useLang } from "./LanguageProvider";
+import { t, COMPOSITION_LABELS, ASPECT_RATIO_LABELS } from "../lib/i18n";
 
 type ResizeHandle = "nw" | "n" | "ne" | "e" | "se" | "s" | "sw" | "w";
 
@@ -13,6 +15,7 @@ const OVERLAY_ALPHA = 0.55;
 const HANDLE_SIZE = 16; // pixel hit area for resize handles
 
 export default function CropEditor() {
+  const { lang } = useLang();
   const { imageSrc, setImageSrc, composition, setComposition, imageRef: ctxImageRef } = useEditor();
   const [image, setImage] = useState<HTMLImageElement | null>(null);
   const [displayW, setDisplayW] = useState(0);
@@ -492,20 +495,19 @@ export default function CropEditor() {
             </svg>
           </div>
           <h2 className="text-2xl font-semibold text-white mb-3 tracking-tight">
-            CropImageArt
+            {t(lang, "uploadTitle")}
           </h2>
           <p className="text-zinc-400 mb-2 text-sm">
-            Crop images with professional composition guides
+            {t(lang, "uploadDesc")}
           </p>
           <p className="text-zinc-600 mb-8 text-xs leading-relaxed max-w-xs mx-auto">
-            Drag & drop an image, or click to browse. Use Rule of Thirds,
-            Golden Ratio, Golden Spiral and more to frame beautifully.
+            {t(lang, "uploadHint")}
           </p>
           <button
             onClick={() => fileInputRef.current?.click()}
             className="px-7 py-3 bg-white text-black rounded-full font-medium text-sm hover:bg-zinc-200 transition-colors"
           >
-            Choose Image
+            {t(lang, "chooseImage")}
           </button>
           <input
             ref={fileInputRef}
@@ -529,7 +531,7 @@ export default function CropEditor() {
       <div className="flex items-center gap-3 px-5 py-2.5 border-b border-zinc-800/60 bg-zinc-950 flex-shrink-0 overflow-x-auto">
         {/* Ratio */}
         <div className="flex items-center gap-2">
-          <span className="text-[10px] text-zinc-500 uppercase tracking-widest font-medium">Ratio</span>
+          <span className="text-[10px] text-zinc-500 uppercase tracking-widest font-medium">{t(lang, "ratio")}</span>
           <div className="flex gap-0.5 bg-zinc-900 rounded-lg p-0.5">
             {([
               ["free", "Free"],
@@ -551,7 +553,7 @@ export default function CropEditor() {
                     : "text-zinc-400 hover:text-white hover:bg-zinc-800"
                 }`}
               >
-                {label}
+                {ASPECT_RATIO_LABELS[lang]?.[key] || key}
               </button>
             ))}
           </div>
@@ -561,9 +563,9 @@ export default function CropEditor() {
 
         {/* Composition Grid */}
         <div className="flex items-center gap-2">
-          <span className="text-[10px] text-zinc-500 uppercase tracking-widest font-medium">Grid</span>
+          <span className="text-[10px] text-zinc-500 uppercase tracking-widest font-medium">{t(lang, "grid")}</span>
           <div className="flex gap-0.5 bg-zinc-900 rounded-lg p-0.5">
-            {Object.entries(COMPOSITION_LABELS).map(([key, label]) => (
+            {Object.entries(COMPOSITION_LABELS.en).map(([key]) => (
               <button
                 key={key}
                 onClick={() => setComposition(key as CompositionType)}
@@ -573,7 +575,7 @@ export default function CropEditor() {
                     : "text-zinc-400 hover:text-white hover:bg-zinc-800"
                 }`}
               >
-                {label}
+                {COMPOSITION_LABELS[lang]?.[key] || key}
               </button>
             ))}
           </div>
@@ -609,13 +611,13 @@ export default function CropEditor() {
 
         {/* Actions */}
         <button onClick={handleReset} className="text-[11px] text-zinc-400 hover:text-white px-2.5 py-1.5 rounded-lg hover:bg-zinc-800 transition-colors">
-          Reset
+          {t(lang, "reset")}
         </button>
         <button
           onClick={() => fileInputRef.current?.click()}
           className="text-[11px] text-zinc-400 hover:text-white px-2.5 py-1.5 rounded-lg hover:bg-zinc-800 transition-colors"
         >
-          New
+          {t(lang, "new")}
         </button>
         <input
           ref={fileInputRef}
@@ -634,7 +636,7 @@ export default function CropEditor() {
           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
           </svg>
-          Export
+          {t(lang, "export")}
         </button>
       </div>
 
@@ -650,10 +652,10 @@ export default function CropEditor() {
         {image && (
           <div className="absolute top-3 left-0 right-0 flex justify-center pointer-events-none z-10">
             <span className="text-[11px] text-zinc-400 bg-black/60 px-2.5 py-1 rounded-full backdrop-blur-sm inline-flex items-center gap-1.5">
-              <span className="text-zinc-500">原图</span>
+              <span className="text-zinc-500">{t(lang, "original")}</span>
               {image.naturalWidth} × {image.naturalHeight}
               <span className="text-zinc-600">·</span>
-              <span className="text-zinc-500">裁切</span>
+              <span className="text-zinc-500">{t(lang, "cropSize")}</span>
               <span className="inline-block w-[72px] text-white">
                 {initialized ? `${Math.round(crop.width * getScale())} × ${Math.round(crop.height * getScale())}` : '—'}
               </span>
@@ -760,7 +762,7 @@ export default function CropEditor() {
                 onClick={() => setIsPreviewing(false)}
                 className="pointer-events-auto text-[11px] font-medium text-zinc-300 bg-zinc-800/90 px-3.5 py-1.5 rounded-full hover:bg-zinc-700 transition-all shadow-lg shadow-black/30"
               >
-                Cancel
+                {t(lang, "cancel")}
               </button>
             ) : (
               <button
@@ -770,7 +772,7 @@ export default function CropEditor() {
                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                Preview
+                {t(lang, "preview")}
               </button>
             )}
         </div>
@@ -786,13 +788,13 @@ export default function CropEditor() {
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowExportModal(false)} />
           <div className="relative bg-zinc-900 border border-zinc-700/50 rounded-2xl p-6 w-[280px] shadow-2xl shadow-black/50">
-            <h3 className="text-sm font-semibold text-white mb-4">Export As</h3>
+            <h3 className="text-sm font-semibold text-white mb-4">{t(lang, "exportAs")}</h3>
             <div className="flex flex-col gap-1.5">
               {([
-                { format: "png" as const, label: "PNG", desc: "无损 · 带透明" },
-                { format: "jpeg" as const, label: "JPEG", desc: "有损压缩 · 更小" },
-                { format: "webp" as const, label: "WebP", desc: "现代格式 · 体积小" },
-              ] as const).map(({ format, label, desc }) => (
+                { format: "png" as const, label: "PNG", descKey: "pngDesc" as const },
+                { format: "jpeg" as const, label: "JPEG", descKey: "jpegDesc" as const },
+                { format: "webp" as const, label: "WebP", descKey: "webpDesc" as const },
+              ] as const).map(({ format, label, descKey }) => (
                 <button
                   key={format}
                   onClick={() => handleExport(format)}
@@ -800,7 +802,7 @@ export default function CropEditor() {
                 >
                   <div>
                     <div className="text-[13px] font-medium text-white group-hover:text-white">{label}</div>
-                    <div className="text-[11px] text-zinc-500">{desc}</div>
+                    <div className="text-[11px] text-zinc-500">{t(lang, descKey)}</div>
                   </div>
                   <svg className="w-4 h-4 text-zinc-600 group-hover:text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />

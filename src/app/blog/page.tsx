@@ -2,10 +2,13 @@
 
 import Link from "next/link";
 import { blogPosts } from "../lib/blog-posts";
-import { COMPOSITION_LABELS } from "../lib/types";
 import GridDiagram from "../components/GridDiagram";
+import { useLang } from "../components/LanguageProvider";
+import { t, COMPOSITION_LABELS } from "../lib/i18n";
 
 export default function BlogPage() {
+  const { lang } = useLang();
+
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-200">
       {/* Header */}
@@ -17,10 +20,10 @@ export default function BlogPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
               </svg>
             </div>
-            <span className="text-sm font-semibold text-white tracking-tight">CropImageArt</span>
+            <span className="text-sm font-semibold text-white tracking-tight">{t(lang, "siteName")}</span>
           </Link>
           <Link href="/" className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors">
-            ← Back to Editor
+            {t(lang, "backToEditor")}
           </Link>
         </div>
       </header>
@@ -28,12 +31,10 @@ export default function BlogPage() {
       <main className="max-w-4xl mx-auto px-6 py-12">
         <div className="mb-12">
           <h1 className="text-3xl font-bold text-white mb-3 tracking-tight">
-            Composition Guides
+            {t(lang, "compositionGuides")}
           </h1>
           <p className="text-zinc-400 leading-relaxed max-w-2xl">
-            Deep dives into every composition technique available in CropImageArt.
-            Learn the principles, discover when to use each grid, and master the art of
-            cropping with intention.
+            {t(lang, "blogDesc")}
           </p>
         </div>
 
@@ -53,7 +54,7 @@ export default function BlogPage() {
               <div className="min-w-0">
                 <div className="flex items-center gap-2 mb-1.5">
                   <span className="text-[10px] text-purple-400 bg-purple-400/10 px-2 py-0.5 rounded-full font-medium uppercase tracking-wide">
-                    {COMPOSITION_LABELS[post.compositionType as keyof typeof COMPOSITION_LABELS] || post.compositionType}
+                    {COMPOSITION_LABELS[lang]?.[post.compositionType] || post.compositionType}
                   </span>
                   <span className="text-[10px] text-zinc-600">{post.readTime}</span>
                 </div>

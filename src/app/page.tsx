@@ -2,8 +2,12 @@
 
 import Link from "next/link";
 import CropEditor from "./components/CropEditor";
+import { useLang } from "./components/LanguageProvider";
+import { t } from "./lib/i18n";
 
 export default function Home() {
+  const { lang, setLang } = useLang();
+
   return (
     <main className="flex-1 flex flex-col h-full">
       {/* Header */}
@@ -26,10 +30,10 @@ export default function Home() {
           </div>
           <div>
             <h1 className="text-[13px] font-semibold text-white tracking-tight leading-none">
-              CropImageArt
+              {t(lang, "siteName")}
             </h1>
             <p className="text-[10px] text-zinc-500 leading-none mt-0.5">
-              Compose beautiful crops
+              {t(lang, "tagline")}
             </p>
           </div>
         </div>
@@ -39,11 +43,28 @@ export default function Home() {
             href="/blog"
             className="text-[11px] text-zinc-400 hover:text-white transition-colors px-3 py-1.5 rounded-full hover:bg-zinc-800/60"
           >
-            Guides
+            {t(lang, "guides")}
           </Link>
           <span className="text-[10px] font-medium text-zinc-500 bg-zinc-800/40 px-2.5 py-1 rounded-full">
-            Free
+            {t(lang, "free")}
           </span>
+
+          {/* Language switcher */}
+          <div className="flex items-center gap-0.5 ml-1 bg-zinc-800/50 rounded-full p-0.5">
+            {(["en", "zh-CN", "zh-TW"] as const).map((code) => (
+              <button
+                key={code}
+                onClick={() => setLang(code)}
+                className={`text-[10px] font-medium px-2 py-1 rounded-full transition-all ${
+                  lang === code
+                    ? "bg-white text-black shadow-sm"
+                    : "text-zinc-400 hover:text-zinc-200"
+                }`}
+              >
+                {code === "en" ? "EN" : code === "zh-CN" ? "简" : "繁"}
+              </button>
+            ))}
+          </div>
         </div>
       </header>
 

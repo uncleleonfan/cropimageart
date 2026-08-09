@@ -3,14 +3,16 @@
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { getPostBySlug, blogPosts } from "../../lib/blog-posts";
-import { COMPOSITION_LABELS } from "../../lib/types";
 import { notFound } from "next/navigation";
 import GridDiagram from "../../components/GridDiagram";
+import { useLang } from "../../components/LanguageProvider";
+import { t, COMPOSITION_LABELS, tf } from "../../lib/i18n";
 
 export default function BlogPostPage() {
   const params = useParams();
   const slug = params.slug as string;
   const post = getPostBySlug(slug);
+  const { lang } = useLang();
 
   if (!post) {
     notFound();
@@ -31,10 +33,10 @@ export default function BlogPostPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
               </svg>
             </div>
-            <span className="text-sm font-semibold text-white tracking-tight">CropImageArt</span>
+            <span className="text-sm font-semibold text-white tracking-tight">{t(lang, "siteName")}</span>
           </Link>
           <Link href="/blog" className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors">
-            ← All Guides
+            {t(lang, "allGuides")}
           </Link>
         </div>
       </header>
@@ -44,11 +46,11 @@ export default function BlogPostPage() {
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
             <span className="text-[10px] text-purple-400 bg-purple-400/10 px-2.5 py-0.5 rounded-full font-medium uppercase tracking-wide">
-              {COMPOSITION_LABELS[post.compositionType as keyof typeof COMPOSITION_LABELS] || post.compositionType}
+              {COMPOSITION_LABELS[lang]?.[post.compositionType] || post.compositionType}
             </span>
             <span className="text-[10px] text-zinc-600">{post.publishedAt}</span>
             <span className="text-[10px] text-zinc-600">·</span>
-            <span className="text-[10px] text-zinc-600">{post.readTime} read</span>
+            <span className="text-[10px] text-zinc-600">{post.readTime} {t(lang, "read")}</span>
           </div>
 
           <h1 className="text-3xl font-bold text-white mb-3 tracking-tight leading-tight">
@@ -71,7 +73,7 @@ export default function BlogPostPage() {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={post.exampleImage}
-                alt={`${post.title} 示例照片`}
+                alt={post.exampleImageCaption}
                 className="w-full h-auto"
                 loading="lazy"
               />
@@ -91,7 +93,7 @@ export default function BlogPostPage() {
         <div className="mb-10">
           <GridDiagram type={post.compositionType} />
           <p className="text-center text-[11px] text-zinc-600 mt-3">
-            {COMPOSITION_LABELS[post.compositionType as keyof typeof COMPOSITION_LABELS]} — grid overlay visualization
+            {COMPOSITION_LABELS[lang]?.[post.compositionType] || post.compositionType}
           </p>
         </div>
 
@@ -114,7 +116,7 @@ export default function BlogPostPage() {
         {/* Tips box */}
         <div className="mb-12 p-6 rounded-xl bg-purple-500/5 border border-purple-500/15">
           <h3 className="text-sm font-semibold text-purple-300 mb-3 uppercase tracking-wide">
-            Quick Tips
+            {t(lang, "quickTips")}
           </h3>
           <ul className="space-y-2">
             {post.tips.map((tip, i) => (
@@ -136,13 +138,13 @@ export default function BlogPostPage() {
         {/* Try it CTA */}
         <div className="mb-12 p-6 rounded-xl bg-zinc-900/80 border border-zinc-800 text-center">
           <p className="text-zinc-300 mb-3 text-sm">
-            Ready to try <span className="text-white font-medium">{post.title}</span> on your own photos?
+            {tf(lang, "tryIt")(post.title)}
           </p>
           <Link
             href="/"
             className="inline-flex items-center gap-2 px-6 py-2.5 bg-white text-black rounded-full text-sm font-medium hover:bg-zinc-200 transition-colors"
           >
-            Open Editor
+            {t(lang, "openEditor")}
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
             </svg>
@@ -156,7 +158,7 @@ export default function BlogPostPage() {
               href={`/blog/${prevPost.slug}`}
               className="group flex-1 text-left p-4 rounded-lg border border-zinc-800/40 hover:border-zinc-700/60 transition-colors"
             >
-              <span className="text-[10px] text-zinc-600 uppercase tracking-wider">← Previous</span>
+              <span className="text-[10px] text-zinc-600 uppercase tracking-wider">{t(lang, "previous")}</span>
               <p className="text-sm text-zinc-300 group-hover:text-white transition-colors mt-1 line-clamp-1">
                 {prevPost.title}
               </p>
@@ -169,7 +171,7 @@ export default function BlogPostPage() {
               href={`/blog/${nextPost.slug}`}
               className="group flex-1 text-right p-4 rounded-lg border border-zinc-800/40 hover:border-zinc-700/60 transition-colors"
             >
-              <span className="text-[10px] text-zinc-600 uppercase tracking-wider">Next →</span>
+              <span className="text-[10px] text-zinc-600 uppercase tracking-wider">{t(lang, "next")}</span>
               <p className="text-sm text-zinc-300 group-hover:text-white transition-colors mt-1 line-clamp-1">
                 {nextPost.title}
               </p>
