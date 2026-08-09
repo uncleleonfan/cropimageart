@@ -27,6 +27,8 @@ export default function CropEditor() {
   const [dragCropStart, setDragCropStart] = useState<CropRect>({ x: 0, y: 0, width: 0, height: 0 });
   const [initialized, setInitialized] = useState(false);
   const [activeHandle, setActiveHandle] = useState<ResizeHandle | null>(null);
+  const [isPreviewing, setIsPreviewing] = useState(false);
+  const [previewSrc, setPreviewSrc] = useState<string | null>(null);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const imageBoxRef = useRef<HTMLDivElement>(null);
@@ -67,6 +69,7 @@ export default function CropEditor() {
         setRotation(0);
         setZoom(1);
         setInitialized(false);
+        setIsPreviewing(false);
       };
       img.src = src;
     };
@@ -362,12 +365,62 @@ export default function CropEditor() {
     }, "image/png");
   }, [image, imageSrc, crop, rotation, getScale]);
 
+  // ---- Generate preview via Canvas ----
+  useEffect(() => {
+    if (!isPreviewing || !image || crop.width === 0 || crop.height === 0) {
+      if (!isPreviewing) setPreviewSrc(null);
+      return;
+    }
+
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d")!;
+    const scale = getScale();
+
+    const sx = Math.round(crop.x * scale);
+    const sy = Math.round(crop.y * scale);
+    const sw = Math.round(crop.width * scale);
+    const sh = Math.round(crop.height * scale);
+
+    canvas.width = sw;
+    canvas.height = sh;
+
+    if (rotation % 360 === 0) {
+      ctx.drawImage(image, sx, sy, sw, sh, 0, 0, sw, sh);
+    } else {
+      const srcW = image.naturalWidth;
+      const srcH = image.naturalHeight;
+      let rotW: number, rotH: number;
+      if (rotation % 180 === 0) {
+        rotW = srcW; rotH = srcH;
+      } else {
+        rotW = srcH; rotH = srcW;
+      }
+
+      const tempCanvas = document.createElement("canvas");
+      tempCanvas.width = rotW;
+      tempCanvas.height = rotH;
+      const tctx = tempCanvas.getContext("2d")!;
+      tctx.save();
+      tctx.translate(rotW / 2, rotH / 2);
+      tctx.rotate((rotation * Math.PI) / 180);
+      tctx.drawImage(image, -srcW / 2, -srcH / 2, srcW, srcH);
+      tctx.restore();
+
+      ctx.drawImage(tempCanvas, sx, sy, sw, sh, 0, 0, sw, sh);
+    }
+
+    const url = canvas.toDataURL("image/png");
+    setPreviewSrc(url);
+    return () => { URL.revokeObjectURL(url); };
+  }, [isPreviewing, image, crop, rotation, getScale]);
+
   // ---- Reset ----
   const handleReset = useCallback(() => {
     setRotation(0);
     setZoom(1);
     setAspectRatio("free");
     setInitialized(false);
+    setIsPreviewing(false);
   }, []);
 
   // ---- Upload screen ----
@@ -544,61 +597,84 @@ export default function CropEditor() {
             <div
               ref={imageBoxRef}
               className="relative select-none"
-              style={{ width: displayW, height: displayH }}
+              style={{
+                width: isPreviewing ? crop.width : displayW,
+                height: isPreviewing ? crop.height : displayH,
+                overflow: isPreviewing ? "hidden" : "visible",
+                transition: isPreviewing ? "width 0.35s ease, height 0.35s ease" : "none",
+                borderRadius: isPreviewing ? "4px" : undefined,
+              }}
             >
               {/* Image */}
               <img
-                src={imageSrc}
+                src={isPreviewing && previewSrc ? previewSrc : imageSrc}
                 alt=""
                 draggable={false}
-                className="absolute inset-0 w-full h-full object-contain"
-                style={{ transform: `rotate(${rotation}deg)` }}
+                className="absolute pointer-events-none"
+                style={isPreviewing
+                  ? { top: 0, left: 0, width: "100%", height: "100%", objectFit: "contain" }
+                  : {
+                      top: 0, left: 0, width: "100%", height: "100%",
+                      objectFit: "contain",
+                      transform: `rotate(${rotation}deg)`,
+                    }
+                }
               />
 
               {/* Crop area with dark overlay via box-shadow */}
-              <div
-                className="absolute touch-none"
-                style={{
-                  left: crop.x,
-                  top: crop.y,
-                  width: crop.width,
-                  height: crop.height,
-                  cursor: isDragging ? "grabbing" : "grab",
-                  boxShadow: `0 0 0 9999px rgba(0,0,0,${OVERLAY_ALPHA})`,
-                }}
-                onMouseDown={onMouseDown}
-                onTouchStart={onTouchStart}
-              >
-                {/* Grid overlay */}
-                <CompositionGrid
-                  type={composition}
-                  width={crop.width}
-                  height={crop.height}
-                />
-
-                {/* Outer border */}
-                <div className="absolute inset-0 ring-2 ring-white/70 pointer-events-none" />
-
-                {/* Inner thin border */}
-                <div className="absolute inset-0 ring-1 ring-white/15 pointer-events-none" />
-
-                {/* Handles */}
-                {([
-                  ["nw", "cursor-nw-resize", "-top-1.5 -left-1.5"],
-                  ["n", "cursor-n-resize", "-top-1.5 left-1/2 -translate-x-1/2"],
-                  ["ne", "cursor-ne-resize", "-top-1.5 -right-1.5"],
-                  ["e", "cursor-e-resize", "top-1/2 -translate-y-1/2 -right-1.5"],
-                  ["se", "cursor-se-resize", "-bottom-1.5 -right-1.5"],
-                  ["s", "cursor-s-resize", "-bottom-1.5 left-1/2 -translate-x-1/2"],
-                  ["sw", "cursor-sw-resize", "-bottom-1.5 -left-1.5"],
-                  ["w", "cursor-w-resize", "top-1/2 -translate-y-1/2 -left-1.5"],
-                ] as const).map(([handle, cursor, posClass]) => (
-                  <div
-                    key={handle}
-                    className={`absolute ${cursor} ${posClass} w-3 h-3 rounded-full border-2 border-zinc-700 bg-white shadow-md`}
+              {!isPreviewing && (
+                <div
+                  className="absolute touch-none"
+                  style={{
+                    left: crop.x,
+                    top: crop.y,
+                    width: crop.width,
+                    height: crop.height,
+                    cursor: isDragging ? "grabbing" : "grab",
+                    boxShadow: `0 0 0 9999px rgba(0,0,0,${OVERLAY_ALPHA})`,
+                  }}
+                  onMouseDown={onMouseDown}
+                  onTouchStart={onTouchStart}
+                >
+                  {/* Grid overlay */}
+                  <CompositionGrid
+                    type={composition}
+                    width={crop.width}
+                    height={crop.height}
                   />
-                ))}
-              </div>
+
+                  {/* Outer border */}
+                  <div className="absolute inset-0 ring-2 ring-white/70 pointer-events-none" />
+
+                  {/* Inner thin border */}
+                  <div className="absolute inset-0 ring-1 ring-white/15 pointer-events-none" />
+
+                  {/* Handles */}
+                  {([
+                    ["nw", "cursor-nw-resize", "-top-1.5 -left-1.5"],
+                    ["n", "cursor-n-resize", "-top-1.5 left-1/2 -translate-x-1/2"],
+                    ["ne", "cursor-ne-resize", "-top-1.5 -right-1.5"],
+                    ["e", "cursor-e-resize", "top-1/2 -translate-y-1/2 -right-1.5"],
+                    ["se", "cursor-se-resize", "-bottom-1.5 -right-1.5"],
+                    ["s", "cursor-s-resize", "-bottom-1.5 left-1/2 -translate-x-1/2"],
+                    ["sw", "cursor-sw-resize", "-bottom-1.5 -left-1.5"],
+                    ["w", "cursor-w-resize", "top-1/2 -translate-y-1/2 -left-1.5"],
+                  ] as const).map(([handle, cursor, posClass]) => (
+                    <div
+                      key={handle}
+                      className={`absolute ${cursor} ${posClass} w-3 h-3 rounded-full border-2 border-zinc-700 bg-white shadow-md`}
+                    />
+                  ))}
+                </div>
+              )}
+
+              {/* Preview mode: simple border */}
+              {isPreviewing && (
+                <>
+                  <div className="absolute inset-0 ring-1 ring-white/20 ring-inset pointer-events-none rounded-[4px]" />
+                  <div className="absolute -inset-1 ring-2 ring-white/60 pointer-events-none rounded-[6px]" />
+                </>
+              )}
             </div>
           </div>
         )}
@@ -608,10 +684,40 @@ export default function CropEditor() {
           <span className="text-[11px] text-zinc-500 bg-black/60 px-2.5 py-1 rounded-full backdrop-blur-sm">
             {image.naturalWidth} × {image.naturalHeight}
           </span>
-          <span className="text-[11px] text-zinc-400 bg-black/60 px-2.5 py-1 rounded-full backdrop-blur-sm">
-            {Math.round(crop.width * getScale())} × {Math.round(crop.height * getScale())}
-          </span>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setIsPreviewing((v) => !v)}
+              className="pointer-events-auto flex items-center gap-1.5 text-[11px] font-medium bg-white text-black px-3.5 py-1.5 rounded-full hover:bg-zinc-200 transition-all shadow-lg shadow-black/30"
+            >
+              {isPreviewing ? (
+                <>
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                  Exit Preview
+                </>
+              ) : (
+                <>
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Preview
+                </>
+              )}
+            </button>
+            <span className="text-[11px] text-zinc-400 bg-black/60 px-2.5 py-1 rounded-full backdrop-blur-sm">
+              {Math.round(crop.width * getScale())} × {Math.round(crop.height * getScale())}
+            </span>
+          </div>
         </div>
+
+        {/* Preview backdrop click to exit */}
+        {isPreviewing && (
+          <div
+            className="absolute inset-0 cursor-pointer"
+            onClick={() => setIsPreviewing(false)}
+          />
+        )}
       </div>
     </div>
   );
