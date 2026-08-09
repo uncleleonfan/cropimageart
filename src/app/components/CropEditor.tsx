@@ -622,11 +622,17 @@ export default function CropEditor() {
         onDrop={handleDrop}
         onDragOver={(e) => e.preventDefault()}
       >
-        {/* Image dimensions at top */}
+        {/* Image & crop dimensions at top */}
         {image && (
           <div className="absolute top-3 left-0 right-0 flex justify-center pointer-events-none z-10">
-            <span className="text-[11px] text-zinc-400 bg-black/60 px-2.5 py-1 rounded-full backdrop-blur-sm">
+            <span className="text-[11px] text-zinc-400 bg-black/60 px-2.5 py-1 rounded-full backdrop-blur-sm inline-flex items-center gap-1.5">
+              <span className="text-zinc-500">原图</span>
               {image.naturalWidth} × {image.naturalHeight}
+              <span className="text-zinc-600">·</span>
+              <span className="text-zinc-500">裁切</span>
+              <span className="text-white">
+                {initialized ? `${Math.round(crop.width * getScale())} × ${Math.round(crop.height * getScale())}` : '—'}
+              </span>
             </span>
           </div>
         )}
@@ -718,10 +724,8 @@ export default function CropEditor() {
           </div>
         )}
 
-        {/* Bottom info bar */}
-        <div className="absolute bottom-3 left-3 right-3 flex items-center justify-end pointer-events-none gap-2">
-          {/* Center: preview / apply buttons */}
-          <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2">
+        {/* Bottom bar — preview / apply buttons */}
+        <div className="absolute bottom-3 left-0 right-0 flex items-center justify-center pointer-events-none gap-2">
             {isPreviewing ? (
               <>
                 <button
@@ -751,11 +755,6 @@ export default function CropEditor() {
                 Preview
               </button>
             )}
-          </div>
-
-          <span className="text-[11px] text-zinc-400 bg-black/60 px-2.5 py-1 rounded-full backdrop-blur-sm">
-            {Math.round(crop.width * getScale())} × {Math.round(crop.height * getScale())}
-          </span>
         </div>
 
         {/* Preview backdrop */}
