@@ -33,6 +33,8 @@ export default function CropEditor() {
   const containerRef = useRef<HTMLDivElement>(null);
   const imageBoxRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const originalImageRef = useRef<HTMLImageElement | null>(null);
+  const originalSrcRef = useRef<string | null>(null);
 
   const ratio = aspectRatio === "free" ? null : ASPECT_RATIO_VALUES[aspectRatio];
 
@@ -66,6 +68,8 @@ export default function CropEditor() {
       img.onload = () => {
         setImage(img);
         setImageSrc(src);
+        originalImageRef.current = img;
+        originalSrcRef.current = src;
         setRotation(0);
         setZoom(1);
         setInitialized(false);
@@ -431,8 +435,14 @@ export default function CropEditor() {
     img.src = previewSrc;
   }, [previewSrc]);
 
-  // ---- Reset ----
+  // ---- Reset to original image ----
   const handleReset = useCallback(() => {
+    const origImg = originalImageRef.current;
+    const origSrc = originalSrcRef.current;
+    if (origImg && origSrc) {
+      setImage(origImg);
+      setImageSrc(origSrc);
+    }
     setRotation(0);
     setZoom(1);
     setAspectRatio("free");
