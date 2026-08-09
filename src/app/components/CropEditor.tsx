@@ -29,6 +29,7 @@ export default function CropEditor() {
   const [activeHandle, setActiveHandle] = useState<ResizeHandle | null>(null);
 
   const containerRef = useRef<HTMLDivElement>(null);
+  const imageBoxRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const ratio = aspectRatio === "free" ? null : ASPECT_RATIO_VALUES[aspectRatio];
@@ -154,8 +155,9 @@ export default function CropEditor() {
 
   // ---- Position helpers (mouse + touch) ----
   const getPos = useCallback((clientX: number, clientY: number) => {
-    if (!containerRef.current) return { x: 0, y: 0 };
-    const r = containerRef.current.getBoundingClientRect();
+    const target = imageBoxRef.current || containerRef.current;
+    if (!target) return { x: 0, y: 0 };
+    const r = target.getBoundingClientRect();
     return { x: clientX - r.left, y: clientY - r.top };
   }, []);
 
@@ -523,6 +525,7 @@ export default function CropEditor() {
         {displayW > 0 && displayH > 0 && (
           <div className="absolute inset-0 flex items-center justify-center">
             <div
+              ref={imageBoxRef}
               className="relative select-none"
               style={{ width: displayW, height: displayH }}
             >
