@@ -414,6 +414,23 @@ export default function CropEditor() {
     return () => { URL.revokeObjectURL(url); };
   }, [isPreviewing, image, crop, rotation, getScale]);
 
+  // ---- Apply crop (preview → continue editing) ----
+  const handleApplyCrop = useCallback(() => {
+    if (!previewSrc) return;
+    const img = new Image();
+    img.onload = () => {
+      setImage(img);
+      setImageSrc(previewSrc);
+      setRotation(0);
+      setZoom(1);
+      setAspectRatio("free");
+      setInitialized(false);
+      setIsPreviewing(false);
+      setPreviewSrc(null);
+    };
+    img.src = previewSrc;
+  }, [previewSrc]);
+
   // ---- Reset ----
   const handleReset = useCallback(() => {
     setRotation(0);
@@ -684,39 +701,48 @@ export default function CropEditor() {
           <span className="text-[11px] text-zinc-500 bg-black/60 px-2.5 py-1 rounded-full backdrop-blur-sm">
             {image.naturalWidth} × {image.naturalHeight}
           </span>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setIsPreviewing((v) => !v)}
-              className="pointer-events-auto flex items-center gap-1.5 text-[11px] font-medium bg-white text-black px-3.5 py-1.5 rounded-full hover:bg-zinc-200 transition-all shadow-lg shadow-black/30"
-            >
-              {isPreviewing ? (
-                <>
+
+          {/* Center: preview / apply buttons */}
+          <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2">
+            {isPreviewing ? (
+              <>
+                <button
+                  onClick={() => setIsPreviewing(false)}
+                  className="pointer-events-auto text-[11px] font-medium text-zinc-300 bg-zinc-800/90 px-3.5 py-1.5 rounded-full hover:bg-zinc-700 transition-all shadow-lg shadow-black/30"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleApplyCrop}
+                  className="pointer-events-auto flex items-center gap-1.5 text-[11px] font-semibold bg-white text-black px-4 py-1.5 rounded-full hover:bg-zinc-200 transition-all shadow-lg shadow-black/30"
+                >
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
-                  Exit Preview
-                </>
-              ) : (
-                <>
-                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  Preview
-                </>
-              )}
-            </button>
-            <span className="text-[11px] text-zinc-400 bg-black/60 px-2.5 py-1 rounded-full backdrop-blur-sm">
-              {Math.round(crop.width * getScale())} × {Math.round(crop.height * getScale())}
-            </span>
+                  Apply
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={() => setIsPreviewing(true)}
+                className="pointer-events-auto flex items-center gap-1.5 text-[11px] font-medium bg-white text-black px-3.5 py-1.5 rounded-full hover:bg-zinc-200 transition-all shadow-lg shadow-black/30"
+              >
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Preview
+              </button>
+            )}
           </div>
+
+          <span className="text-[11px] text-zinc-400 bg-black/60 px-2.5 py-1 rounded-full backdrop-blur-sm">
+            {Math.round(crop.width * getScale())} × {Math.round(crop.height * getScale())}
+          </span>
         </div>
 
-        {/* Preview backdrop click to exit */}
+        {/* Preview backdrop */}
         {isPreviewing && (
-          <div
-            className="absolute inset-0 cursor-pointer"
-            onClick={() => setIsPreviewing(false)}
-          />
+          <div className="absolute inset-0 -z-10" />
         )}
       </div>
     </div>
