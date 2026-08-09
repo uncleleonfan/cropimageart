@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { AspectRatio, CompositionType, CropRect } from "../lib/types";
 import { ASPECT_RATIO_VALUES, COMPOSITION_LABELS } from "../lib/types";
 import CompositionGrid from "./CompositionGrid";
+import { useEditor } from "./EditorProvider";
 
 type ResizeHandle = "nw" | "n" | "ne" | "e" | "se" | "s" | "sw" | "w";
 
@@ -12,12 +13,11 @@ const OVERLAY_ALPHA = 0.55;
 const HANDLE_SIZE = 16; // pixel hit area for resize handles
 
 export default function CropEditor() {
+  const { imageSrc, setImageSrc, composition, setComposition, imageRef: ctxImageRef } = useEditor();
   const [image, setImage] = useState<HTMLImageElement | null>(null);
-  const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [displayW, setDisplayW] = useState(0);
   const [displayH, setDisplayH] = useState(0);
   const [aspectRatio, setAspectRatio] = useState<AspectRatio>("free");
-  const [composition, setComposition] = useState<CompositionType>("thirds");
   const [crop, setCrop] = useState<CropRect>({ x: 0, y: 0, width: 0, height: 0 });
   const [rotation, setRotation] = useState(0);
   const [zoom, setZoom] = useState(1);
@@ -68,6 +68,7 @@ export default function CropEditor() {
       img.onload = () => {
         setImage(img);
         setImageSrc(src);
+        ctxImageRef.current = img;
         originalImageRef.current = img;
         originalSrcRef.current = src;
         setRotation(0);
@@ -78,7 +79,19 @@ export default function CropEditor() {
       img.src = src;
     };
     reader.readAsDataURL(file);
-  }, []);
+  }, [setImageSrc, ctxImageRef]);
+
+  // ---- Restore image from context on mount (after navigating back) ----
+  useEffect(() => {
+    if (imageSrc && !image) {
+      const img = new Image();
+      img.onload = () => {
+        setImage(img);
+        ctxImageRef.current = img;
+      };
+      img.src = imageSrc;
+    }
+  }, []); // run once on mount
 
   const handleDrop = useCallback(
     (e: React.DragEvent) => {
@@ -445,8 +458,9 @@ export default function CropEditor() {
     // Load the actual Image element (needed for dimensions / download)
     preImg.onload = () => {
       setImage(preImg);
+      ctxImageRef.current = preImg;
     };
-  }, [previewSrc]);
+  }, [previewSrc, setImageSrc, ctxImageRef]);
 
   // ---- Reset to original image ----
   const handleReset = useCallback(() => {
