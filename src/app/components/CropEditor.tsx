@@ -565,7 +565,7 @@ export default function CropEditor() {
           >−</button>
           <span className="w-10 text-center tabular-nums text-[11px]">{Math.round(zoom * 100)}%</span>
           <button
-            onClick={() => setZoom((z) => Math.min(4, +(z + 0.25).toFixed(2)))}
+            onClick={() => setZoom((z) => Math.min(1, +(z + 0.25).toFixed(2)))}
             className="w-6 h-6 rounded flex items-center justify-center hover:bg-zinc-800 hover:text-white transition-colors"
           >+</button>
         </div>
