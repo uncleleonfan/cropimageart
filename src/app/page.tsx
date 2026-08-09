@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import CropEditor from "./components/CropEditor";
 
 export default function Home() {
@@ -34,14 +35,12 @@ export default function Home() {
         </div>
 
         <div className="flex items-center gap-4">
-          <a
-            href="https://en.wikipedia.org/wiki/Rule_of_thirds"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[11px] text-zinc-500 hover:text-zinc-300 transition-colors"
+          <Link
+            href="/blog"
+            className="text-[11px] text-zinc-400 hover:text-white transition-colors"
           >
-            What is Rule of Thirds?
-          </a>
+            Composition Guides
+          </Link>
           <span className="text-[11px] text-zinc-700">Free & Open</span>
         </div>
       </header>
