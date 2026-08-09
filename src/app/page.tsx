@@ -45,9 +45,6 @@ export default function Home() {
           >
             {t(lang, "guides")}
           </Link>
-          <span className="text-[10px] font-medium text-zinc-500 bg-zinc-800/40 px-2.5 py-1 rounded-full">
-            {t(lang, "free")}
-          </span>
 
           {/* Language switcher */}
           <div className="flex items-center gap-0.5 ml-1 bg-zinc-800/50 rounded-full p-0.5">
