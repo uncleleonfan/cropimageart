@@ -8,7 +8,17 @@ export type CompositionType =
   | "diagonal"
   | "triangle"
   | "cross"
-  | "phi-grid";
+  | "phi-grid"
+  | "symmetry"
+  | "quarters"
+  | "radiating"
+  | "leading-lines"
+  | "s-curve"
+  | "x-composition"
+  | "l-shape"
+  | "circular"
+  | "cinematic"
+  | "dynamic-symmetry";
 
 export interface CropRect {
   x: number;
@@ -49,6 +59,16 @@ export const COMPOSITION_LABELS: Record<CompositionType, string> = {
   triangle: "Triangle",
   cross: "Center Cross",
   "phi-grid": "Phi Grid",
+  symmetry: "Symmetry",
+  quarters: "Quarters",
+  radiating: "Radiating",
+  "leading-lines": "Leading Lines",
+  "s-curve": "S-Curve",
+  "x-composition": "X Compose",
+  "l-shape": "L-Shape",
+  circular: "Circular",
+  cinematic: "Cinematic",
+  "dynamic-symmetry": "Dynamic Sym.",
 };
 
 export const ASPECT_RATIO_VALUES: Record<Exclude<AspectRatio, "free">, number> = {
