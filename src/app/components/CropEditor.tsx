@@ -713,9 +713,14 @@ export default function CropEditor() {
                 </div>
               )}
 
-              {/* Preview mode: simple border */}
+              {/* Preview mode: composition grid + border */}
               {isPreviewing && (
                 <>
+                  <CompositionGrid
+                    type={composition}
+                    width={crop.width}
+                    height={crop.height}
+                  />
                   <div className="absolute inset-0 ring-1 ring-white/20 ring-inset pointer-events-none rounded-[4px]" />
                   <div className="absolute -inset-1 ring-2 ring-white/60 pointer-events-none rounded-[6px]" />
                 </>
@@ -727,23 +732,12 @@ export default function CropEditor() {
         {/* Bottom bar — preview / apply buttons */}
         <div className="absolute bottom-3 left-0 right-0 flex items-center justify-center pointer-events-none gap-2">
             {isPreviewing ? (
-              <>
-                <button
-                  onClick={() => setIsPreviewing(false)}
-                  className="pointer-events-auto text-[11px] font-medium text-zinc-300 bg-zinc-800/90 px-3.5 py-1.5 rounded-full hover:bg-zinc-700 transition-all shadow-lg shadow-black/30"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleApplyCrop}
-                  className="pointer-events-auto flex items-center gap-1.5 text-[11px] font-semibold bg-white text-black px-4 py-1.5 rounded-full hover:bg-zinc-200 transition-all shadow-lg shadow-black/30"
-                >
-                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  Apply
-                </button>
-              </>
+              <button
+                onClick={() => setIsPreviewing(false)}
+                className="pointer-events-auto text-[11px] font-medium text-zinc-300 bg-zinc-800/90 px-3.5 py-1.5 rounded-full hover:bg-zinc-700 transition-all shadow-lg shadow-black/30"
+              >
+                Cancel
+              </button>
             ) : (
               <button
                 onClick={() => setIsPreviewing(true)}
