@@ -5,6 +5,7 @@ import Link from "next/link";
 import { getPostBySlug, blogPosts } from "../../lib/blog-posts";
 import { COMPOSITION_LABELS } from "../../lib/types";
 import { notFound } from "next/navigation";
+import GridDiagram from "../../components/GridDiagram";
 
 export default function BlogPostPage() {
   const params = useParams();
@@ -59,8 +60,16 @@ export default function BlogPostPage() {
         </div>
 
         {/* Intro */}
-        <div className="mb-10 text-base leading-relaxed text-zinc-300">
+        <div className="mb-8 text-base leading-relaxed text-zinc-300">
           {post.intro}
+        </div>
+
+        {/* Grid Diagram */}
+        <div className="mb-10">
+          <GridDiagram type={post.compositionType} />
+          <p className="text-center text-[11px] text-zinc-600 mt-3">
+            {COMPOSITION_LABELS[post.compositionType as keyof typeof COMPOSITION_LABELS]} — grid overlay visualization
+          </p>
         </div>
 
         {/* Sections */}

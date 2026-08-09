@@ -1,3 +1,5 @@
+import { CompositionType } from "./types";
+
 export interface BlogSection {
   heading: string;
   body: string;
@@ -7,7 +9,7 @@ export interface BlogPost {
   slug: string;
   title: string;
   subtitle: string;
-  compositionType: string;
+  compositionType: CompositionType;
   publishedAt: string;
   readTime: string;
   intro: string;

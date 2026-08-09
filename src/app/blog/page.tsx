@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { blogPosts } from "../lib/blog-posts";
 import { COMPOSITION_LABELS } from "../lib/types";
+import GridDiagram from "../components/GridDiagram";
 
 export default function BlogPage() {
   return (
@@ -41,30 +42,36 @@ export default function BlogPage() {
             <Link
               key={post.slug}
               href={`/blog/${post.slug}`}
-              className="group block p-5 rounded-xl border border-zinc-800/60 hover:border-zinc-700/80 bg-zinc-900/40 hover:bg-zinc-900/80 transition-all"
+              className="group grid grid-cols-[140px_1fr_24px] gap-5 p-5 rounded-xl border border-zinc-800/60 hover:border-zinc-700/80 bg-zinc-900/40 hover:bg-zinc-900/80 transition-all items-center"
             >
-              <div className="flex items-start justify-between gap-4">
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2 mb-1.5">
-                    <span className="text-[10px] text-purple-400 bg-purple-400/10 px-2 py-0.5 rounded-full font-medium uppercase tracking-wide">
-                      {COMPOSITION_LABELS[post.compositionType as keyof typeof COMPOSITION_LABELS] || post.compositionType}
-                    </span>
-                    <span className="text-[10px] text-zinc-600">{post.readTime}</span>
-                  </div>
-                  <h2 className="text-base font-semibold text-white group-hover:text-purple-300 transition-colors mb-1">
-                    {post.title}
-                  </h2>
-                  <p className="text-sm text-zinc-500 line-clamp-1">{post.subtitle}</p>
-                </div>
-                <svg
-                  className="w-5 h-5 text-zinc-700 group-hover:text-zinc-400 transition-colors flex-shrink-0 mt-1"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
+              {/* Thumbnail */}
+              <div className="rounded-lg overflow-hidden border border-zinc-800/50 bg-zinc-900">
+                <GridDiagram type={post.compositionType} className="[&>div:last-child]:hidden" />
               </div>
+
+              {/* Text */}
+              <div className="min-w-0">
+                <div className="flex items-center gap-2 mb-1.5">
+                  <span className="text-[10px] text-purple-400 bg-purple-400/10 px-2 py-0.5 rounded-full font-medium uppercase tracking-wide">
+                    {COMPOSITION_LABELS[post.compositionType as keyof typeof COMPOSITION_LABELS] || post.compositionType}
+                  </span>
+                  <span className="text-[10px] text-zinc-600">{post.readTime}</span>
+                </div>
+                <h2 className="text-base font-semibold text-white group-hover:text-purple-300 transition-colors mb-1">
+                  {post.title}
+                </h2>
+                <p className="text-sm text-zinc-500 line-clamp-1">{post.subtitle}</p>
+              </div>
+
+              {/* Arrow */}
+              <svg
+                className="w-5 h-5 text-zinc-700 group-hover:text-zinc-400 transition-colors flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
             </Link>
           ))}
         </div>
