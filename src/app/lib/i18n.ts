@@ -650,6 +650,30 @@ const ui = {
     de: "Start",
     pt: "Início",
   },
+
+  // privacy & terms
+  privacy: {
+    en: "Privacy Policy",
+    "zh-CN": "隐私政策",
+    "zh-TW": "隱私政策",
+    ja: "プライバシーポリシー",
+    ko: "개인정보 처리방침",
+    es: "Política de Privacidad",
+    fr: "Politique de Confidentialité",
+    de: "Datenschutzerklärung",
+    pt: "Política de Privacidade",
+  },
+  terms: {
+    en: "Terms of Service",
+    "zh-CN": "服务条款",
+    "zh-TW": "服務條款",
+    ja: "利用規約",
+    ko: "서비스 약관",
+    es: "Términos de Servicio",
+    fr: "Conditions d'Utilisation",
+    de: "Nutzungsbedingungen",
+    pt: "Termos de Serviço",
+  },
 } as const;
 
 // Function-based translations
