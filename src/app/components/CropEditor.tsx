@@ -314,26 +314,25 @@ export default function CropEditor() {
   }, [moveDrag, endDrag]);
 
   // ---- Download ----
-  const handleDownload = useCallback(() => {
-    if (!image || !imageSrc) return;
+  const [showExportModal, setShowExportModal] = useState(false);
+  const exportCanvasRef = useRef<HTMLCanvasElement | null>(null);
 
+  const generateExportCanvas = useCallback(() => {
+    if (!image) return null;
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d")!;
     const scale = getScale();
 
-    // Map crop from display space to source image space
     const sx = Math.round(crop.x * scale);
     const sy = Math.round(crop.y * scale);
     const sw = Math.round(crop.width * scale);
     const sh = Math.round(crop.height * scale);
 
     if (rotation % 360 === 0) {
-      // No rotation: direct crop
       canvas.width = sw;
       canvas.height = sh;
       ctx.drawImage(image, sx, sy, sw, sh, 0, 0, sw, sh);
     } else {
-      // Pre-rotate the full image, then crop
       const srcW = image.naturalWidth;
       const srcH = image.naturalHeight;
       let rotW: number, rotH: number;
@@ -357,17 +356,28 @@ export default function CropEditor() {
       canvas.height = sh;
       ctx.drawImage(tempCanvas, sx, sy, sw, sh, 0, 0, sw, sh);
     }
+    return canvas;
+  }, [image, crop, rotation, getScale]);
+
+  const handleExport = useCallback((format: "png" | "jpeg" | "webp") => {
+    const canvas = generateExportCanvas();
+    if (!canvas) return;
+
+    const ext = format === "jpeg" ? "jpg" : format;
+    const mime = format === "jpeg" ? "image/jpeg" : `image/${format}`;
+    const quality = format === "png" ? undefined : 0.92;
 
     canvas.toBlob((blob) => {
       if (!blob) return;
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `cropped-${Date.now()}.png`;
+      a.download = `cropped-${Date.now()}.${ext}`;
       a.click();
       URL.revokeObjectURL(url);
-    }, "image/png");
-  }, [image, imageSrc, crop, rotation, getScale]);
+      setShowExportModal(false);
+    }, mime, quality);
+  }, [generateExportCanvas]);
 
   // ---- Generate preview via Canvas ----
   useEffect(() => {
@@ -604,7 +614,7 @@ export default function CropEditor() {
           }}
         />
         <button
-          onClick={handleDownload}
+          onClick={() => setShowExportModal(true)}
           className="flex items-center gap-1.5 text-[11px] font-semibold bg-white text-black px-4 py-1.5 rounded-full hover:bg-zinc-200 transition-colors"
         >
           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -756,6 +766,37 @@ export default function CropEditor() {
           <div className="absolute inset-0 -z-10" />
         )}
       </div>
+
+      {/* ---- Export Format Modal ---- */}
+      {showExportModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowExportModal(false)} />
+          <div className="relative bg-zinc-900 border border-zinc-700/50 rounded-2xl p-6 w-[280px] shadow-2xl shadow-black/50">
+            <h3 className="text-sm font-semibold text-white mb-4">Export As</h3>
+            <div className="flex flex-col gap-1.5">
+              {([
+                { format: "png" as const, label: "PNG", desc: "无损 · 带透明" },
+                { format: "jpeg" as const, label: "JPEG", desc: "有损压缩 · 更小" },
+                { format: "webp" as const, label: "WebP", desc: "现代格式 · 体积小" },
+              ] as const).map(({ format, label, desc }) => (
+                <button
+                  key={format}
+                  onClick={() => handleExport(format)}
+                  className="flex items-center justify-between w-full px-4 py-3 rounded-xl hover:bg-zinc-800 text-left transition-colors group"
+                >
+                  <div>
+                    <div className="text-[13px] font-medium text-white group-hover:text-white">{label}</div>
+                    <div className="text-[11px] text-zinc-500">{desc}</div>
+                  </div>
+                  <svg className="w-4 h-4 text-zinc-600 group-hover:text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
