@@ -124,6 +124,23 @@ export default function CropEditor() {
     setInitialized(true);
   }, [displayW, displayH, initialized]);
 
+  // ---- Clamp crop when display size changes (zoom) ----
+  useEffect(() => {
+    if (!initialized || displayW === 0 || displayH === 0) return;
+    setCrop((prev) => {
+      let { x, y, width, height } = prev;
+      if (x + width > displayW) x = Math.max(0, displayW - width);
+      if (y + height > displayH) y = Math.max(0, displayH - height);
+      if (width > displayW) width = displayW;
+      if (height > displayH) height = displayH;
+      if (
+        x === prev.x && y === prev.y &&
+        width === prev.width && height === prev.height
+      ) return prev;
+      return { x, y, width, height };
+    });
+  }, [displayW, displayH, initialized]);
+
   // ---- When aspect ratio changes, re-constrain crop ----
   const handleRatioChange = useCallback(
     (newRatio: AspectRatio) => {
