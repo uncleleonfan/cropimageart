@@ -44,7 +44,7 @@ export default function CropEditor() {
       if (image && containerRef.current) {
         const container = containerRef.current;
         const maxW = container.clientWidth - 40;
-        const maxH = container.clientHeight - 40;
+        const maxH = container.clientHeight - 120;
         const imgW = rotation % 180 === 0 ? image.naturalWidth : image.naturalHeight;
         const imgH = rotation % 180 === 0 ? image.naturalHeight : image.naturalWidth;
         const imgRatio = imgW / imgH;
@@ -94,7 +94,7 @@ export default function CropEditor() {
     if (!image || !containerRef.current) return;
     const container = containerRef.current;
     const maxW = container.clientWidth - 40;
-    const maxH = container.clientHeight - 40;
+    const maxH = container.clientHeight - 120;
 
     const imgW = rotation % 180 === 0 ? image.naturalWidth : image.naturalHeight;
     const imgH = rotation % 180 === 0 ? image.naturalHeight : image.naturalWidth;
@@ -622,6 +622,15 @@ export default function CropEditor() {
         onDrop={handleDrop}
         onDragOver={(e) => e.preventDefault()}
       >
+        {/* Image dimensions at top */}
+        {image && (
+          <div className="absolute top-3 left-0 right-0 flex justify-center pointer-events-none z-10">
+            <span className="text-[11px] text-zinc-400 bg-black/60 px-2.5 py-1 rounded-full backdrop-blur-sm">
+              {image.naturalWidth} × {image.naturalHeight}
+            </span>
+          </div>
+        )}
+
         {displayW > 0 && displayH > 0 && (
           <div className="absolute inset-0 flex items-center justify-center">
             <div
@@ -710,11 +719,7 @@ export default function CropEditor() {
         )}
 
         {/* Bottom info bar */}
-        <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between pointer-events-none">
-          <span className="text-[11px] text-zinc-500 bg-black/60 px-2.5 py-1 rounded-full backdrop-blur-sm">
-            {image.naturalWidth} × {image.naturalHeight}
-          </span>
-
+        <div className="absolute bottom-3 left-3 right-3 flex items-center justify-end pointer-events-none gap-2">
           {/* Center: preview / apply buttons */}
           <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2">
             {isPreviewing ? (
