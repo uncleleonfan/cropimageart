@@ -527,58 +527,54 @@ export default function CropEditor() {
   // ---- Main editor ----
   return (
     <div className="flex-1 flex flex-col min-h-0">
-      {/* ---- Toolbar ---- */}
-      <div className="flex items-center gap-3 px-5 py-2.5 border-b border-zinc-800/60 bg-zinc-950 flex-shrink-0 overflow-x-auto">
-        {/* Ratio */}
-        <div className="flex items-center gap-2">
-          <span className="text-[10px] text-zinc-500 uppercase tracking-widest font-medium">{t(lang, "ratio")}</span>
-          <div className="flex gap-0.5 bg-zinc-900 rounded-lg p-0.5">
-            {([
-              ["free", "Free"],
-              ["1:1", "1:1"],
-              ["4:5", "4:5"],
-              ["3:4", "3:4"],
-              ["2:3", "2:3"],
-              ["9:16", "9:16"],
-              ["16:9", "16:9"],
-              ["4:3", "4:3"],
-              ["3:2", "3:2"],
-            ] as [AspectRatio, string][]).map(([key, label]) => (
-              <button
-                key={key}
-                onClick={() => handleRatioChange(key)}
-                className={`text-[11px] px-2.5 py-1 rounded-md transition-colors ${
-                  aspectRatio === key
-                    ? "bg-white text-black font-medium"
-                    : "text-zinc-400 hover:text-white hover:bg-zinc-800"
-                }`}
-              >
-                {ASPECT_RATIO_LABELS[lang]?.[key] || key}
-              </button>
-            ))}
-          </div>
+      {/* ---- Toolbar: Ratio (top row) ---- */}
+      <div className="flex items-center gap-3 px-5 py-2 border-b border-zinc-800/60 bg-zinc-950 flex-shrink-0 overflow-x-auto">
+        <span className="text-[10px] text-zinc-500 uppercase tracking-widest font-medium">{t(lang, "ratio")}</span>
+        <div className="flex gap-0.5 bg-zinc-900 rounded-lg p-0.5">
+          {([
+            ["free", "Free"],
+            ["1:1", "1:1"],
+            ["4:5", "4:5"],
+            ["3:4", "3:4"],
+            ["2:3", "2:3"],
+            ["9:16", "9:16"],
+            ["16:9", "16:9"],
+            ["4:3", "4:3"],
+            ["3:2", "3:2"],
+          ] as [AspectRatio, string][]).map(([key]) => (
+            <button
+              key={key}
+              onClick={() => handleRatioChange(key)}
+              className={`text-[11px] px-2.5 py-1 rounded-md transition-colors ${
+                aspectRatio === key
+                  ? "bg-white text-black font-medium"
+                  : "text-zinc-400 hover:text-white hover:bg-zinc-800"
+              }`}
+            >
+              {ASPECT_RATIO_LABELS[lang]?.[key] || key}
+            </button>
+          ))}
         </div>
+      </div>
 
-        <div className="w-px h-5 bg-zinc-800" />
-
+      {/* ---- Toolbar: Grid + controls (second row) ---- */}
+      <div className="flex items-center gap-3 px-5 py-2 border-b border-zinc-800/60 bg-zinc-950 flex-shrink-0 overflow-x-auto">
         {/* Composition Grid */}
-        <div className="flex items-center gap-2">
-          <span className="text-[10px] text-zinc-500 uppercase tracking-widest font-medium">{t(lang, "grid")}</span>
-          <div className="flex gap-0.5 bg-zinc-900 rounded-lg p-0.5">
-            {Object.entries(COMPOSITION_LABELS.en).map(([key]) => (
-              <button
-                key={key}
-                onClick={() => setComposition(key as CompositionType)}
-                className={`text-[11px] px-2.5 py-1 rounded-md transition-colors whitespace-nowrap ${
-                  composition === key
-                    ? "bg-white text-black font-medium"
-                    : "text-zinc-400 hover:text-white hover:bg-zinc-800"
-                }`}
-              >
-                {COMPOSITION_LABELS[lang]?.[key] || key}
-              </button>
-            ))}
-          </div>
+        <span className="text-[10px] text-zinc-500 uppercase tracking-widest font-medium">{t(lang, "grid")}</span>
+        <div className="flex gap-0.5 bg-zinc-900 rounded-lg p-0.5">
+          {Object.entries(COMPOSITION_LABELS.en).map(([key]) => (
+            <button
+              key={key}
+              onClick={() => setComposition(key as CompositionType)}
+              className={`text-[11px] px-2.5 py-1 rounded-md transition-colors whitespace-nowrap ${
+                composition === key
+                  ? "bg-white text-black font-medium"
+                  : "text-zinc-400 hover:text-white hover:bg-zinc-800"
+              }`}
+            >
+              {COMPOSITION_LABELS[lang]?.[key] || key}
+            </button>
+          ))}
         </div>
 
         <div className="flex-1" />
