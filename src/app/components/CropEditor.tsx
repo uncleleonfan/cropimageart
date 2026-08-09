@@ -421,18 +421,21 @@ export default function CropEditor() {
   // ---- Apply crop (preview → continue editing) ----
   const handleApplyCrop = useCallback(() => {
     if (!previewSrc) return;
-    const img = new Image();
-    img.onload = () => {
-      setImage(img);
-      setImageSrc(previewSrc);
-      setRotation(0);
-      setZoom(1);
-      setAspectRatio("free");
-      setInitialized(false);
-      setIsPreviewing(false);
-      setPreviewSrc(null);
+
+    // Immediately switch to cropped image for display
+    const preImg = new Image();
+    preImg.src = previewSrc;
+    setImageSrc(previewSrc);
+    setIsPreviewing(false);
+    setRotation(0);
+    setZoom(1);
+    setAspectRatio("free");
+    setInitialized(false);
+
+    // Load the actual Image element (needed for dimensions / download)
+    preImg.onload = () => {
+      setImage(preImg);
     };
-    img.src = previewSrc;
   }, [previewSrc]);
 
   // ---- Reset to original image ----
