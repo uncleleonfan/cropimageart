@@ -2,10 +2,15 @@
 
 import Link from "next/link";
 import { useLang } from "./LanguageProvider";
+import { useEditor } from "./EditorProvider";
 import { t } from "../lib/i18n";
 
 export default function Footer() {
   const { lang } = useLang();
+  const { imageSrc } = useEditor();
+
+  // Hide footer when editing an image — user needs full screen space
+  if (imageSrc) return null;
 
   return (
     <footer className="border-t border-zinc-800/40 bg-zinc-950/90 backdrop-blur-xl">
