@@ -18,6 +18,7 @@ export default function BlogPostPage() {
     notFound();
   }
 
+  const c = post.content[lang] || post.content["en"];
   const currentIndex = blogPosts.findIndex((p) => p.slug === slug);
   const prevPost = currentIndex > 0 ? blogPosts[currentIndex - 1] : null;
   const nextPost = currentIndex < blogPosts.length - 1 ? blogPosts[currentIndex + 1] : null;
@@ -50,20 +51,20 @@ export default function BlogPostPage() {
             </span>
             <span className="text-[10px] text-zinc-600">{post.publishedAt}</span>
             <span className="text-[10px] text-zinc-600">·</span>
-            <span className="text-[10px] text-zinc-600">{post.readTime} {t(lang, "read")}</span>
+            <span className="text-[10px] text-zinc-600">{post.readTime[lang] || post.readTime["en"]} {t(lang, "read")}</span>
           </div>
 
           <h1 className="text-3xl font-bold text-white mb-3 tracking-tight leading-tight">
-            {post.title}
+            {c.title}
           </h1>
           <p className="text-zinc-400 text-base leading-relaxed">
-            {post.subtitle}
+            {c.subtitle}
           </p>
         </div>
 
         {/* Intro */}
         <div className="mb-8 text-base leading-relaxed text-zinc-300">
-          {post.intro}
+          {c.intro}
         </div>
 
         {/* Example Photo */}
@@ -73,17 +74,17 @@ export default function BlogPostPage() {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={post.exampleImage}
-                alt={post.exampleImageCaption}
+                alt={c.exampleImageCaption}
                 className="w-full h-auto"
                 loading="lazy"
               />
             </div>
             <div className="flex items-start justify-between mt-3 gap-4">
               <p className="text-sm text-zinc-400">
-                {post.exampleImageCaption}
+                {c.exampleImageCaption}
               </p>
               <span className="text-[10px] text-zinc-600 flex-shrink-0 mt-0.5">
-                {post.exampleImageCredit}
+                {post.exampleImageCredit[lang] || post.exampleImageCredit["en"]}
               </span>
             </div>
           </div>
@@ -99,7 +100,7 @@ export default function BlogPostPage() {
 
         {/* Sections */}
         <div className="space-y-10 mb-12">
-          {post.sections.map((section, i) => (
+          {c.sections.map((section, i) => (
             <section key={i}>
               <h2 className="text-xl font-semibold text-white mb-3 tracking-tight">
                 {section.heading}
@@ -119,7 +120,7 @@ export default function BlogPostPage() {
             {t(lang, "quickTips")}
           </h3>
           <ul className="space-y-2">
-            {post.tips.map((tip, i) => (
+            {c.tips.map((tip, i) => (
               <li key={i} className="flex items-start gap-2.5 text-sm text-zinc-300">
                 <svg
                   className="w-4 h-4 text-purple-400 flex-shrink-0 mt-0.5"
@@ -138,7 +139,7 @@ export default function BlogPostPage() {
         {/* Try it CTA */}
         <div className="mb-12 p-6 rounded-xl bg-zinc-900/80 border border-zinc-800 text-center">
           <p className="text-zinc-300 mb-3 text-sm">
-            {tf(lang, "tryIt")(post.title)}
+            {tf(lang, "tryIt")(c.title)}
           </p>
           <Link
             href="/"
@@ -160,7 +161,7 @@ export default function BlogPostPage() {
             >
               <span className="text-[10px] text-zinc-600 uppercase tracking-wider">{t(lang, "previous")}</span>
               <p className="text-sm text-zinc-300 group-hover:text-white transition-colors mt-1 line-clamp-1">
-                {prevPost.title}
+                {(prevPost.content[lang] || prevPost.content["en"]).title}
               </p>
             </Link>
           ) : (
@@ -173,7 +174,7 @@ export default function BlogPostPage() {
             >
               <span className="text-[10px] text-zinc-600 uppercase tracking-wider">{t(lang, "next")}</span>
               <p className="text-sm text-zinc-300 group-hover:text-white transition-colors mt-1 line-clamp-1">
-                {nextPost.title}
+                {(nextPost.content[lang] || nextPost.content["en"]).title}
               </p>
             </Link>
           ) : (

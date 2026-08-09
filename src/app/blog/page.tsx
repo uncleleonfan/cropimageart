@@ -39,7 +39,9 @@ export default function BlogPage() {
         </div>
 
         <div className="grid gap-4">
-          {blogPosts.map((post) => (
+          {blogPosts.map((post) => {
+            const c = post.content[lang] || post.content["en"];
+            return (
             <Link
               key={post.slug}
               href={`/blog/${post.slug}`}
@@ -56,12 +58,12 @@ export default function BlogPage() {
                   <span className="text-[10px] text-purple-400 bg-purple-400/10 px-2 py-0.5 rounded-full font-medium uppercase tracking-wide">
                     {COMPOSITION_LABELS[lang]?.[post.compositionType] || post.compositionType}
                   </span>
-                  <span className="text-[10px] text-zinc-600">{post.readTime}</span>
+                  <span className="text-[10px] text-zinc-600">{post.readTime[lang] || post.readTime["en"]}</span>
                 </div>
                 <h2 className="text-base font-semibold text-white group-hover:text-purple-300 transition-colors mb-1">
-                  {post.title}
+                  {c.title}
                 </h2>
-                <p className="text-sm text-zinc-500 line-clamp-1">{post.subtitle}</p>
+                <p className="text-sm text-zinc-500 line-clamp-1">{c.subtitle}</p>
               </div>
 
               {/* Arrow */}
@@ -74,7 +76,8 @@ export default function BlogPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </Link>
-          ))}
+            );
+          })}
         </div>
       </main>
     </div>
