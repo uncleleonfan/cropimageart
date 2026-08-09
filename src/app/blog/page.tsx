@@ -40,7 +40,7 @@ export default function BlogPage() {
 
         <div className="grid gap-4">
           {blogPosts.map((post) => {
-            const c = post.content[lang] || post.content["en"];
+            const c = post.content[lang] || post.content["en"]!;
             return (
             <Link
               key={post.slug}

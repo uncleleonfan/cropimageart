@@ -16,11 +16,10 @@ const HANDLE_SIZE = 16; // pixel hit area for resize handles
 
 export default function CropEditor() {
   const { lang } = useLang();
-  const { imageSrc, setImageSrc, composition, setComposition, imageRef: ctxImageRef } = useEditor();
+  const { imageSrc, setImageSrc, composition, setComposition, aspectRatio, setAspectRatio, imageRef: ctxImageRef } = useEditor();
   const [image, setImage] = useState<HTMLImageElement | null>(null);
   const [displayW, setDisplayW] = useState(0);
   const [displayH, setDisplayH] = useState(0);
-  const [aspectRatio, setAspectRatio] = useState<AspectRatio>("free");
   const [crop, setCrop] = useState<CropRect>({ x: 0, y: 0, width: 0, height: 0 });
   const [rotation, setRotation] = useState(0);
   const [zoom, setZoom] = useState(1);
@@ -164,27 +163,25 @@ export default function CropEditor() {
     });
   }, [displayW, displayH, initialized]);
 
-  // ---- When aspect ratio changes, re-constrain crop ----
-  const handleRatioChange = useCallback(
-    (newRatio: AspectRatio) => {
-      setAspectRatio(newRatio);
-      if (newRatio === "free") return;
+  // ---- When aspect ratio changes (from context/header), re-constrain crop ----
+  useEffect(() => {
+    if (!initialized || displayW === 0 || displayH === 0) return;
+    if (aspectRatio === "free") return;
 
-      const r = ASPECT_RATIO_VALUES[newRatio as Exclude<AspectRatio, "free">];
-      setCrop((prev) => {
-        const maxW = displayW - prev.x;
-        const maxH = displayH - prev.y;
-        let w = prev.width;
-        let h = w / r;
-        if (h > maxH) { h = maxH; w = h * r; }
-        if (w > maxW) { w = maxW; h = w / r; }
-        if (w < MIN_CROP) { w = MIN_CROP; h = w / r; }
-        if (h < MIN_CROP) { h = MIN_CROP; w = h * r; }
-        return { ...prev, width: Math.round(w), height: Math.round(h) };
-      });
-    },
-    [displayW, displayH]
-  );
+    const r = ASPECT_RATIO_VALUES[aspectRatio as Exclude<AspectRatio, "free">];
+    setCrop((prev) => {
+      const maxW = displayW - prev.x;
+      const maxH = displayH - prev.y;
+      let w = prev.width;
+      let h = w / r;
+      if (h > maxH) { h = maxH; w = h * r; }
+      if (w > maxW) { w = maxW; h = w / r; }
+      if (w < MIN_CROP) { w = MIN_CROP; h = w / r; }
+      if (h < MIN_CROP) { h = MIN_CROP; w = h * r; }
+      return { ...prev, width: Math.round(w), height: Math.round(h) };
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [aspectRatio]);
 
   // ---- Scale factor ----
   const getScale = useCallback(() => {
@@ -285,6 +282,20 @@ export default function CropEditor() {
         nc.y = Math.max(0, Math.min(nc.y, displayH));
         nc.width = Math.max(MIN_CROP, Math.min(nc.width, displayW - nc.x));
         nc.height = Math.max(MIN_CROP, Math.min(nc.height, displayH - nc.y));
+
+        // Re-apply ratio after clamping: if one side was constrained, shrink the other
+        if (ratio) {
+          const idealH = nc.width / ratio;
+          const idealW = nc.height * ratio;
+          if (nc.height < idealH) {
+            // Height hit boundary — shrink width to match
+            nc.width = Math.max(MIN_CROP, Math.round(idealW));
+          } else if (nc.width < idealW) {
+            // Width hit boundary — shrink height to match
+            nc.height = Math.max(MIN_CROP, Math.round(idealH));
+          }
+        }
+
         setCrop({ x: Math.round(nc.x), y: Math.round(nc.y), width: Math.round(nc.width), height: Math.round(nc.height) });
       }
     },
@@ -527,46 +538,16 @@ export default function CropEditor() {
   // ---- Main editor ----
   return (
     <div className="flex-1 flex flex-col min-h-0">
-      {/* ---- Toolbar: Ratio (top row) ---- */}
-      <div className="flex items-center gap-3 px-5 py-2 border-b border-zinc-800/60 bg-zinc-950 flex-shrink-0 overflow-x-auto">
-        <span className="text-[10px] text-zinc-500 uppercase tracking-widest font-medium">{t(lang, "ratio")}</span>
-        <div className="flex gap-0.5 bg-zinc-900 rounded-lg p-0.5">
-          {([
-            ["free", "Free"],
-            ["1:1", "1:1"],
-            ["4:5", "4:5"],
-            ["3:4", "3:4"],
-            ["2:3", "2:3"],
-            ["9:16", "9:16"],
-            ["16:9", "16:9"],
-            ["4:3", "4:3"],
-            ["3:2", "3:2"],
-          ] as [AspectRatio, string][]).map(([key]) => (
-            <button
-              key={key}
-              onClick={() => handleRatioChange(key)}
-              className={`text-[11px] px-2.5 py-1 rounded-md transition-colors ${
-                aspectRatio === key
-                  ? "bg-white text-black font-medium"
-                  : "text-zinc-400 hover:text-white hover:bg-zinc-800"
-              }`}
-            >
-              {ASPECT_RATIO_LABELS[lang]?.[key] || key}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* ---- Toolbar: Grid + controls (second row) ---- */}
-      <div className="flex items-center gap-3 px-5 py-2 border-b border-zinc-800/60 bg-zinc-950 flex-shrink-0 overflow-x-auto">
+      {/* ---- Toolbar: Grid + controls (centered) ---- */}
+      <div className="flex items-center justify-center gap-3 px-5 py-2 border-b border-zinc-800/60 bg-zinc-950 flex-shrink-0 overflow-x-auto">
         {/* Composition Grid */}
-        <span className="text-[10px] text-zinc-500 uppercase tracking-widest font-medium">{t(lang, "grid")}</span>
+        <span className="text-[13px] text-zinc-500 uppercase tracking-widest font-medium">{t(lang, "grid")}</span>
         <div className="flex gap-0.5 bg-zinc-900 rounded-lg p-0.5">
           {Object.entries(COMPOSITION_LABELS.en).map(([key]) => (
             <button
               key={key}
               onClick={() => setComposition(key as CompositionType)}
-              className={`text-[11px] px-2.5 py-1 rounded-md transition-colors whitespace-nowrap ${
+              className={`text-[13px] px-2.5 py-1 rounded-md transition-colors whitespace-nowrap ${
                 composition === key
                   ? "bg-white text-black font-medium"
                   : "text-zinc-400 hover:text-white hover:bg-zinc-800"
@@ -577,15 +558,13 @@ export default function CropEditor() {
           ))}
         </div>
 
-        <div className="flex-1" />
-
         {/* Zoom */}
         <div className="flex items-center gap-1 text-xs text-zinc-400">
           <button
             onClick={() => setZoom((z) => Math.max(0.25, +(z - 0.25).toFixed(2)))}
             className="w-6 h-6 rounded flex items-center justify-center hover:bg-zinc-800 hover:text-white transition-colors"
           >−</button>
-          <span className="w-10 text-center tabular-nums text-[11px]">{Math.round(zoom * 100)}%</span>
+          <span className="w-10 text-center tabular-nums text-[13px]">{Math.round(zoom * 100)}%</span>
           <button
             onClick={() => setZoom((z) => Math.min(1, +(z + 0.25).toFixed(2)))}
             className="w-6 h-6 rounded flex items-center justify-center hover:bg-zinc-800 hover:text-white transition-colors"
@@ -595,7 +574,7 @@ export default function CropEditor() {
         {/* Rotate */}
         <button
           onClick={() => setRotation((r) => (r + 90) % 360)}
-          className="flex items-center gap-1 text-[11px] text-zinc-400 hover:text-white px-2 py-1.5 rounded-lg hover:bg-zinc-800 transition-colors"
+          className="flex items-center gap-1 text-[13px] text-zinc-400 hover:text-white px-2 py-1.5 rounded-lg hover:bg-zinc-800 transition-colors"
         >
           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -606,12 +585,12 @@ export default function CropEditor() {
         <div className="w-px h-5 bg-zinc-800" />
 
         {/* Actions */}
-        <button onClick={handleReset} className="text-[11px] text-zinc-400 hover:text-white px-2.5 py-1.5 rounded-lg hover:bg-zinc-800 transition-colors">
+        <button onClick={handleReset} className="text-[13px] text-zinc-400 hover:text-white px-2.5 py-1.5 rounded-lg hover:bg-zinc-800 transition-colors">
           {t(lang, "reset")}
         </button>
         <button
           onClick={() => fileInputRef.current?.click()}
-          className="text-[11px] text-zinc-400 hover:text-white px-2.5 py-1.5 rounded-lg hover:bg-zinc-800 transition-colors"
+          className="text-[13px] text-zinc-400 hover:text-white px-2.5 py-1.5 rounded-lg hover:bg-zinc-800 transition-colors"
         >
           {t(lang, "new")}
         </button>
@@ -627,7 +606,7 @@ export default function CropEditor() {
         />
         <button
           onClick={() => setShowExportModal(true)}
-          className="flex items-center gap-1.5 text-[11px] font-semibold bg-white text-black px-4 py-1.5 rounded-full hover:bg-zinc-200 transition-colors"
+          className="flex items-center gap-1.5 text-[13px] font-semibold bg-white text-black px-4 py-1.5 rounded-full hover:bg-zinc-200 transition-colors"
         >
           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -647,7 +626,7 @@ export default function CropEditor() {
         {/* Image & crop dimensions at top */}
         {image && (
           <div className="absolute top-3 left-0 right-0 flex justify-center pointer-events-none z-10">
-            <span className="text-[11px] text-zinc-400 bg-black/60 px-2.5 py-1 rounded-full backdrop-blur-sm inline-flex items-center gap-1.5">
+            <span className="text-[13px] text-zinc-400 bg-black/60 px-2.5 py-1 rounded-full backdrop-blur-sm inline-flex items-center gap-1.5">
               <span className="text-zinc-500">{t(lang, "original")}</span>
               {image.naturalWidth} × {image.naturalHeight}
               <span className="text-zinc-600">·</span>
@@ -751,21 +730,21 @@ export default function CropEditor() {
           </div>
         )}
 
-        {/* Bottom bar — preview / apply buttons */}
+        {/* Bottom bar — preview / export buttons */}
         <div className="absolute bottom-3 left-0 right-0 flex items-center justify-center pointer-events-none gap-2">
             {isPreviewing ? (
               <button
                 onClick={() => setIsPreviewing(false)}
-                className="pointer-events-auto text-[11px] font-medium text-zinc-300 bg-zinc-800/90 px-3.5 py-1.5 rounded-full hover:bg-zinc-700 transition-all shadow-lg shadow-black/30"
+                className="pointer-events-auto text-[13px] font-medium text-zinc-300 bg-zinc-800/90 px-3.5 py-1.5 rounded-full hover:bg-zinc-700 transition-all shadow-lg shadow-black/30"
               >
                 {t(lang, "cancel")}
               </button>
             ) : (
               <button
                 onClick={() => setIsPreviewing(true)}
-                className="pointer-events-auto flex items-center gap-1.5 text-[11px] font-medium bg-white text-black px-3.5 py-1.5 rounded-full hover:bg-zinc-200 transition-all shadow-lg shadow-black/30"
+                className="pointer-events-auto flex items-center gap-1.5 text-[13px] font-medium bg-white text-black px-3.5 py-1.5 rounded-full hover:bg-zinc-200 transition-all shadow-lg shadow-black/30"
               >
-                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 {t(lang, "preview")}
@@ -798,7 +777,7 @@ export default function CropEditor() {
                 >
                   <div>
                     <div className="text-[13px] font-medium text-white group-hover:text-white">{label}</div>
-                    <div className="text-[11px] text-zinc-500">{t(lang, descKey)}</div>
+                    <div className="text-[13px] text-zinc-500">{t(lang, descKey)}</div>
                   </div>
                   <svg className="w-4 h-4 text-zinc-600 group-hover:text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -809,6 +788,7 @@ export default function CropEditor() {
           </div>
         </div>
       )}
+
     </div>
   );
 }

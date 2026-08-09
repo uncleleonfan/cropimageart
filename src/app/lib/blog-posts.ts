@@ -12,17 +12,14 @@ export interface BlogPostContent {
   intro: string;
   sections: BlogSection[];
   tips: string[];
-  exampleImageCaption: string;
 }
 
 export interface BlogPost {
   slug: string;
   compositionType: CompositionType;
   publishedAt: string;
-  readTime: Record<LangCode, string>;
-  exampleImage: string;
-  exampleImageCredit: Record<LangCode, string>;
-  content: Record<LangCode, BlogPostContent>;
+  readTime: Partial<Record<LangCode, string>>;
+  content: Partial<Record<LangCode, BlogPostContent>>;
 }
 
 export const blogPosts: BlogPost[] = [
@@ -32,13 +29,6 @@ export const blogPosts: BlogPost[] = [
     compositionType: "thirds",
     publishedAt: "2026-08-09",
     readTime: { en: "8 min", "zh-CN": "8 分钟", "zh-TW": "8 分鐘" },
-    exampleImage:
-      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&h=533&fit=crop&q=80",
-    exampleImageCredit: {
-      en: "Photo by Nathan Anderson / Unsplash",
-      "zh-CN": "Photo by Nathan Anderson / Unsplash",
-      "zh-TW": "Photo by Nathan Anderson / Unsplash",
-    },
     content: {
       en: {
         title: "The Complete Guide to the Rule of Thirds",
@@ -65,8 +55,6 @@ export const blogPosts: BlogPost[] = [
           "Street photography: Place visual anchors (pedestrians, signs) on intersections",
           "Social media: Instagram 4:5 ratio + rule of thirds = an unbeatable combo",
         ],
-        exampleImageCaption:
-          "Classic Yosemite Valley — the horizon sits on the lower third line while the main peak falls on the right vertical third, creating a textbook rule-of-thirds composition",
       },
       "zh-CN": {
         title: "三分法构图完全指南",
@@ -93,8 +81,6 @@ export const blogPosts: BlogPost[] = [
           "街拍：将视觉焦点（行人、招牌）置于交点处",
           "社交媒体：Instagram 4:5 比例 + 三分法 = 绝佳组合",
         ],
-        exampleImageCaption:
-          "经典的约塞米蒂山谷——将地平线放在下三分之一线，山谷主峰落在右侧竖向三分线上，形成了教科书级的三分法构图",
       },
       "zh-TW": {
         title: "三分法構圖完全指南",
@@ -121,8 +107,6 @@ export const blogPosts: BlogPost[] = [
           "街拍：將視覺焦點（行人、招牌）置於交點處",
           "社群媒體：Instagram 4:5 比例 + 三分法 = 絕佳組合",
         ],
-        exampleImageCaption:
-          "經典的優勝美地山谷——將地平線放在下三分之一線，山谷主峰落在右側豎向三分線上，形成了教科書級的三分法構圖",
       },
     },
   },
@@ -133,13 +117,6 @@ export const blogPosts: BlogPost[] = [
     compositionType: "golden-ratio",
     publishedAt: "2026-08-09",
     readTime: { en: "9 min", "zh-CN": "9 分钟", "zh-TW": "9 分鐘" },
-    exampleImage:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=533&fit=crop&q=80",
-    exampleImageCredit: {
-      en: "Photo by Spencer Davis / Unsplash",
-      "zh-CN": "Photo by Spencer Davis / Unsplash",
-      "zh-TW": "Photo by Spencer Davis / Unsplash",
-    },
     content: {
       en: {
         title: "Golden Ratio Composition: The Magic of 1.618",
@@ -166,8 +143,6 @@ export const blogPosts: BlogPost[] = [
           "In landscapes, let the more compelling portion occupy 62% of the frame",
           "Pair with the golden spiral for even stronger results",
         ],
-        exampleImageCaption:
-          "Classical colonnade — the spacing between columns and the overall facade proportion closely approximates φ (1.618), with the subject area occupying roughly 62%",
       },
       "zh-CN": {
         title: "黄金比例构图：1.618 的神奇魔力",
@@ -194,8 +169,6 @@ export const blogPosts: BlogPost[] = [
           "风景中让精彩的部分占画面 62%",
           "与黄金螺旋配合使用效果更佳",
         ],
-        exampleImageCaption:
-          "古典柱廊——柱子间距与立面的整体比例接近 φ (1.618)，主体区域占据约 62%，留白区域占约 38%",
       },
       "zh-TW": {
         title: "黃金比例構圖：1.618 的神奇魔力",
@@ -222,8 +195,6 @@ export const blogPosts: BlogPost[] = [
           "風景中讓精彩的部分佔畫面 62%",
           "與黃金螺旋配合使用效果更佳",
         ],
-        exampleImageCaption:
-          "古典柱廊——柱子間距與立面的整體比例接近 φ (1.618)，主體區域佔據約 62%，留白區域佔約 38%",
       },
     },
   },
@@ -234,13 +205,6 @@ export const blogPosts: BlogPost[] = [
     compositionType: "golden-spiral",
     publishedAt: "2026-08-09",
     readTime: { en: "10 min", "zh-CN": "10 分钟", "zh-TW": "10 分鐘" },
-    exampleImage:
-      "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=800&h=533&fit=crop&q=80",
-    exampleImageCredit: {
-      en: "Photo by Ben Kolde / Unsplash",
-      "zh-CN": "Photo by Ben Kolde / Unsplash",
-      "zh-TW": "Photo by Ben Kolde / Unsplash",
-    },
     content: {
       en: {
         title: "Golden Spiral: Nature's Composition Code",
@@ -267,8 +231,6 @@ export const blogPosts: BlogPost[] = [
           "Natural landscapes (rivers, mountains) are golden spiral naturals",
           "Rotate/flip the spiral to match your photo's content",
         ],
-        exampleImageCaption:
-          "Spiral staircase — nature and human-made structures alike contain perfect Fibonacci spirals; the eye follows each step downward, ultimately resting at the spiral's center",
       },
       "zh-CN": {
         title: "黄金螺旋：大自然的构图密码",
@@ -295,8 +257,6 @@ export const blogPosts: BlogPost[] = [
           "自然风景（河流、山脉）是螺旋构图的天然素材",
           "可以旋转/翻转螺旋来匹配照片内容",
         ],
-        exampleImageCaption:
-          "螺旋楼梯——自然界和人造物中都能找到完美的斐波那契螺旋，视线顺着台阶逐级流转，最终落于螺旋中心",
       },
       "zh-TW": {
         title: "黃金螺旋：大自然的構圖密碼",
@@ -323,8 +283,6 @@ export const blogPosts: BlogPost[] = [
           "自然風景（河流、山脈）是螺旋構圖的天然素材",
           "可以旋轉/翻轉螺旋來匹配照片內容",
         ],
-        exampleImageCaption:
-          "螺旋樓梯——自然界和人造物中都能找到完美的斐波那契螺旋，視線順著台階逐級流轉，最終落於螺旋中心",
       },
     },
   },
@@ -335,13 +293,6 @@ export const blogPosts: BlogPost[] = [
     compositionType: "diagonal",
     publishedAt: "2026-08-09",
     readTime: { en: "7 min", "zh-CN": "7 分钟", "zh-TW": "7 分鐘" },
-    exampleImage:
-      "https://images.unsplash.com/photo-1469474968028-56623f3a0fe1?w=800&h=533&fit=crop&q=80",
-    exampleImageCredit: {
-      en: "Photo by Paul Gilmore / Unsplash",
-      "zh-CN": "Photo by Paul Gilmore / Unsplash",
-      "zh-TW": "Photo by Paul Gilmore / Unsplash",
-    },
     content: {
       en: {
         title: "Diagonal Method: Dynamism, Tension, and Energy",
@@ -368,8 +319,6 @@ export const blogPosts: BlogPost[] = [
           "The intersection of two diagonals is the frame's most eye-catching spot",
           "Pairs especially well with triangle composition",
         ],
-        exampleImageCaption:
-          "Forest path — the road cuts diagonally from the bottom-right to the top-left, forming a strong diagonal line that pulls the gaze from foreground to distance",
       },
       "zh-CN": {
         title: "对角线构图法：动态、张力与能量",
@@ -396,8 +345,6 @@ export const blogPosts: BlogPost[] = [
           "两条对角线交叉处是画面最引人注目的位置",
           "与三角形构图配合效果更好",
         ],
-        exampleImageCaption:
-          "林间小道——道路从右下角斜穿画面至左上角，形成一条强烈的对角线，将视线从前景引向远方",
       },
       "zh-TW": {
         title: "對角線構圖法：動態、張力與能量",
@@ -424,8 +371,6 @@ export const blogPosts: BlogPost[] = [
           "兩條對角線交叉處是畫面最引人注目的位置",
           "與三角形構圖配合效果更好",
         ],
-        exampleImageCaption:
-          "林間小道——道路從右下角斜穿畫面至左上角，形成一條強烈的對角線，將視線從前景引向遠方",
       },
     },
   },
@@ -436,13 +381,6 @@ export const blogPosts: BlogPost[] = [
     compositionType: "triangle",
     publishedAt: "2026-08-09",
     readTime: { en: "8 min", "zh-CN": "8 分钟", "zh-TW": "8 分鐘" },
-    exampleImage:
-      "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&h=533&fit=crop&q=80",
-    exampleImageCredit: {
-      en: "Photo by Kalen Emsley / Unsplash",
-      "zh-CN": "Photo by Kalen Emsley / Unsplash",
-      "zh-TW": "Photo by Kalen Emsley / Unsplash",
-    },
     content: {
       en: {
         title: "Triangle Composition: The Perfect Balance of Stability and Tension",
@@ -469,8 +407,6 @@ export const blogPosts: BlogPost[] = [
           "The base should feel 'heavy'; the apex should feel 'light'",
           "The natural choice for group portraits",
         ],
-        exampleImageCaption:
-          "Mountain peaks naturally form an upright triangle — broad, solid base (foothills) with a sharp, towering apex (summit), conveying a monumental, timeless feeling",
       },
       "zh-CN": {
         title: "三角形构图：稳定与张力的完美平衡",
@@ -497,8 +433,6 @@ export const blogPosts: BlogPost[] = [
           "底边要「重」，顶点要「轻」",
           "群体人像的天然选择",
         ],
-        exampleImageCaption:
-          "山峰轮廓天然形成正三角形——底边宽厚稳重（山脚），顶点尖锐挺拔（山顶），给人庄严、不朽的纪念碑式感受",
       },
       "zh-TW": {
         title: "三角形構圖：穩定與張力的完美平衡",
@@ -525,8 +459,6 @@ export const blogPosts: BlogPost[] = [
           "底邊要「重」，頂點要「輕」",
           "群體人像的天然選擇",
         ],
-        exampleImageCaption:
-          "山峰輪廓天然形成正三角形——底邊寬厚穩重（山腳），頂點尖銳挺拔（山頂），給人莊嚴、不朽的紀念碑式感受",
       },
     },
   },
@@ -537,13 +469,6 @@ export const blogPosts: BlogPost[] = [
     compositionType: "cross",
     publishedAt: "2026-08-09",
     readTime: { en: "7 min", "zh-CN": "7 分钟", "zh-TW": "7 分鐘" },
-    exampleImage:
-      "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&h=533&fit=crop&q=80",
-    exampleImageCredit: {
-      en: "Photo by Drew Hays / Unsplash",
-      "zh-CN": "Photo by Drew Hays / Unsplash",
-      "zh-TW": "Photo by Drew Hays / Unsplash",
-    },
     content: {
       en: {
         title: "Center Cross Composition: An Underestimated Power",
@@ -570,8 +495,6 @@ export const blogPosts: BlogPost[] = [
           "Portraits with direct eye contact are best at center",
           "Pair with symmetry grid for doubled impact",
         ],
-        exampleImageCaption:
-          "Building atrium interior — the arch apex falls exactly on the vertical midline, with the horizontal midline cutting through the arch's visual center of gravity, forming a powerful center cross",
       },
       "zh-CN": {
         title: "中心十字构图：被低估的力量",
@@ -598,8 +521,6 @@ export const blogPosts: BlogPost[] = [
           "人物直视镜头的肖像首选中央位置",
           "配合对称网格使用效果翻倍",
         ],
-        exampleImageCaption:
-          "建筑内部中庭——拱门顶端恰好落在画面垂直中线上，水平中线穿过拱门的视觉重心，形成强有力的中心十字",
       },
       "zh-TW": {
         title: "中心十字構圖：被低估的力量",
@@ -626,8 +547,6 @@ export const blogPosts: BlogPost[] = [
           "人物直視鏡頭的肖像首選中央位置",
           "配合對稱網格使用效果翻倍",
         ],
-        exampleImageCaption:
-          "建築內部中庭——拱門頂端恰好落在畫面垂直中線上，水平中線穿過拱門的視覺重心，形成強有力的中心十字",
       },
     },
   },
@@ -638,13 +557,6 @@ export const blogPosts: BlogPost[] = [
     compositionType: "symmetry",
     publishedAt: "2026-08-09",
     readTime: { en: "8 min", "zh-CN": "8 分钟", "zh-TW": "8 分鐘" },
-    exampleImage:
-      "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=800&h=533&fit=crop&q=80",
-    exampleImageCredit: {
-      en: "Photo by Benjamin Child / Unsplash",
-      "zh-CN": "Photo by Benjamin Child / Unsplash",
-      "zh-TW": "Photo by Benjamin Child / Unsplash",
-    },
     content: {
       en: {
         title: "Symmetry Composition: The Ultimate Expression of Visual Order",
@@ -667,8 +579,6 @@ export const blogPosts: BlogPost[] = [
           "Ensure identical pixel width on both sides of the axis",
           "Mathematical symmetry ≠ visual symmetry — watch color and brightness balance",
         ],
-        exampleImageCaption:
-          "Symmetrical corridor — left-right mirroring in its purest form; arches, columns, and light-shadow patterns are nearly identical on both sides of the central axis",
       },
       "zh-CN": {
         title: "对称构图：秩序之美的终极表达",
@@ -691,8 +601,6 @@ export const blogPosts: BlogPost[] = [
           "确保中轴线两侧宽度像素完全一致",
           "数学对称 ≠ 视觉对称，注意色彩和亮度平衡",
         ],
-        exampleImageCaption:
-          "对称走廊——左右完全镜像是反射对称的极致体现，中轴线两侧的拱门、柱子和光影几乎完全一致",
       },
       "zh-TW": {
         title: "對稱構圖：秩序之美的終極表達",
@@ -715,8 +623,6 @@ export const blogPosts: BlogPost[] = [
           "確保中軸線兩側寬度像素完全一致",
           "數學對稱 ≠ 視覺對稱，注意色彩和亮度平衡",
         ],
-        exampleImageCaption:
-          "對稱走廊——左右完全鏡像是反射對稱的極致體現，中軸線兩側的拱門、柱子和光影幾乎完全一致",
       },
     },
   },
@@ -727,13 +633,6 @@ export const blogPosts: BlogPost[] = [
     compositionType: "leading-lines",
     publishedAt: "2026-08-09",
     readTime: { en: "9 min", "zh-CN": "9 分钟", "zh-TW": "9 分鐘" },
-    exampleImage:
-      "https://images.unsplash.com/photo-1478860409698-8707f313ee8b?w=800&h=533&fit=crop&q=80",
-    exampleImageCredit: {
-      en: "Photo by Sergey Pesterev / Unsplash",
-      "zh-CN": "Photo by Sergey Pesterev / Unsplash",
-      "zh-TW": "Photo by Sergey Pesterev / Unsplash",
-    },
     content: {
       en: {
         title: "Leading Lines Composition: The Main Thread of Visual Storytelling",
@@ -760,8 +659,6 @@ export const blogPosts: BlogPost[] = [
           "Remove path distractions to keep the route clean",
           "Landscape crops strengthen horizontal lines; portrait crops strengthen vertical lines",
         ],
-        exampleImageCaption:
-          "Railway stretching into the distance — train tracks, among nature's most powerful leading lines, pull the gaze from the bottom-left corner all the way to the vanishing point in the distance",
       },
       "zh-CN": {
         title: "引导线构图：视觉叙事的主线路",
@@ -788,8 +685,6 @@ export const blogPosts: BlogPost[] = [
           "移除路径上的干扰物，保持线路干净",
           "横构图加强横向引导，竖构图加强纵向引导",
         ],
-        exampleImageCaption:
-          "铁路延伸到远方——铁轨作为自然界最强的引导线之一，从画面左下角一路将视线拉向远方的消失点",
       },
       "zh-TW": {
         title: "引導線構圖：視覺敘事的主線路",
@@ -816,8 +711,6 @@ export const blogPosts: BlogPost[] = [
           "移除路徑上的干擾物，保持線路乾淨",
           "橫構圖加強橫向引導，豎構圖加強縱向引導",
         ],
-        exampleImageCaption:
-          "鐵路延伸到遠方——鐵軌作為自然界最強的引導線之一，從畫面左下角一路將視線拉向遠方的消失點",
       },
     },
   },

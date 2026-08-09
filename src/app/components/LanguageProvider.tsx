@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { LANGUAGES } from "../lib/i18n";
 import type { LangCode } from "../lib/i18n";
 
 type LangContextValue = {
@@ -16,14 +17,16 @@ export function useLang() {
   return ctx;
 }
 
+const VALID_CODES = new Set<string>(LANGUAGES.map((l) => l.code));
+
 export default function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [lang, setLangState] = useState<LangCode>("en");
 
   // Load saved preference
   useEffect(() => {
     const saved = localStorage.getItem("cropimageart-lang");
-    if (saved === "en" || saved === "zh-CN" || saved === "zh-TW") {
-      setLangState(saved);
+    if (saved && VALID_CODES.has(saved)) {
+      setLangState(saved as LangCode);
     }
   }, []);
 

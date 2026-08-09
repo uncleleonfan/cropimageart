@@ -18,7 +18,7 @@ export default function BlogPostPage() {
     notFound();
   }
 
-  const c = post.content[lang] || post.content["en"];
+  const c = post.content[lang] || post.content["en"]!;
   const currentIndex = blogPosts.findIndex((p) => p.slug === slug);
   const prevPost = currentIndex > 0 ? blogPosts[currentIndex - 1] : null;
   const nextPost = currentIndex < blogPosts.length - 1 ? blogPosts[currentIndex + 1] : null;
@@ -66,29 +66,6 @@ export default function BlogPostPage() {
         <div className="mb-8 text-base leading-relaxed text-zinc-300">
           {c.intro}
         </div>
-
-        {/* Example Photo */}
-        {post.exampleImage && (
-          <div className="mb-10">
-            <div className="rounded-xl overflow-hidden border border-zinc-800/60">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={post.exampleImage}
-                alt={c.exampleImageCaption}
-                className="w-full h-auto"
-                loading="lazy"
-              />
-            </div>
-            <div className="flex items-start justify-between mt-3 gap-4">
-              <p className="text-sm text-zinc-400">
-                {c.exampleImageCaption}
-              </p>
-              <span className="text-[10px] text-zinc-600 flex-shrink-0 mt-0.5">
-                {post.exampleImageCredit[lang] || post.exampleImageCredit["en"]}
-              </span>
-            </div>
-          </div>
-        )}
 
         {/* Grid Diagram */}
         <div className="mb-10">
@@ -161,7 +138,7 @@ export default function BlogPostPage() {
             >
               <span className="text-[10px] text-zinc-600 uppercase tracking-wider">{t(lang, "previous")}</span>
               <p className="text-sm text-zinc-300 group-hover:text-white transition-colors mt-1 line-clamp-1">
-                {(prevPost.content[lang] || prevPost.content["en"]).title}
+                {(prevPost.content[lang] || prevPost.content["en"]!).title}
               </p>
             </Link>
           ) : (
@@ -174,7 +151,7 @@ export default function BlogPostPage() {
             >
               <span className="text-[10px] text-zinc-600 uppercase tracking-wider">{t(lang, "next")}</span>
               <p className="text-sm text-zinc-300 group-hover:text-white transition-colors mt-1 line-clamp-1">
-                {(nextPost.content[lang] || nextPost.content["en"]).title}
+                {(nextPost.content[lang] || nextPost.content["en"]!).title}
               </p>
             </Link>
           ) : (

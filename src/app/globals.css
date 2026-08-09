@@ -8,7 +8,7 @@
 body {
   background: #09090b;
   color: #fafafa;
-  font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+  font-family: var(--font-dm-sans), "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, -apple-system, sans-serif;
 }
 
 /* Custom scrollbar */
