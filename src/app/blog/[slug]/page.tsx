@@ -43,6 +43,35 @@ export default function BlogPostPage() {
       </header>
 
       <article className="max-w-3xl mx-auto px-6 py-12">
+        {/* Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Article",
+              headline: (post.content["en"] || post.content["zh-CN"]!).title,
+              description:
+                (post.content["en"] || post.content["zh-CN"]!).subtitle ||
+                (post.content["en"] || post.content["zh-CN"]!).intro ||
+                "",
+              datePublished: post.publishedAt,
+              author: {
+                "@type": "Organization",
+                name: "CropImageArt",
+              },
+              publisher: {
+                "@type": "Organization",
+                name: "CropImageArt",
+              },
+              mainEntityOfPage: {
+                "@type": "WebPage",
+                "@id": `https://cropimageart.vercel.app/blog/${post.slug}`,
+              },
+            }),
+          }}
+        />
+
         {/* Meta */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">

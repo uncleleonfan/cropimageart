@@ -17,9 +17,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "CropImageArt — Crop with Composition Guides",
+  metadataBase: new URL("https://cropimageart.vercel.app"),
+  title: {
+    default: "CropImageArt — Free Online Image Cropping Tool with Composition Guides",
+    template: "%s — CropImageArt",
+  },
   description:
-    "Crop images beautifully with professional composition guides including Rule of Thirds, Golden Ratio, Golden Spiral, Diagonal Method, and more. Free online image cropping tool.",
+    "Crop images beautifully with professional composition guides including Rule of Thirds, Golden Ratio, Golden Spiral, Diagonal Method, and more. Free online image cropping tool — all processing happens locally in your browser, no upload needed.",
   keywords: [
     "image crop",
     "composition grid",
@@ -28,12 +32,38 @@ export const metadata: Metadata = {
     "photo crop tool",
     "aesthetic crop",
     "online image editor",
+    "golden spiral",
+    "diagonal method",
+    "triangle composition",
+    "leading lines",
+    "free image cropper",
   ],
+  authors: [{ name: "CropImageArt" }],
+  creator: "CropImageArt",
+  publisher: "CropImageArt",
+  robots: {
+    index: true,
+    follow: true,
+    "max-snippet": -1,
+    "max-image-preview": "large",
+    "max-video-preview": -1,
+  },
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
-    title: "CropImageArt — Crop with Composition Guides",
+    siteName: "CropImageArt",
+    title: "CropImageArt — Free Online Image Cropping Tool with Composition Guides",
     description:
-      "Crop images beautifully with professional composition guides.",
+      "Crop images beautifully with professional composition guides. Free, private, no upload needed.",
     type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "CropImageArt — Free Online Image Cropping Tool",
+    description:
+      "Crop images beautifully with professional composition guides. Free, private, no upload needed.",
   },
 };
 

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import CropEditor from "./components/CropEditor";
+import HomeStructuredData from "./components/HomeStructuredData";
 import { useLang } from "./components/LanguageProvider";
 import { useEditor } from "./components/EditorProvider";
 import { t, ASPECT_RATIO_LABELS, LANGUAGES } from "./lib/i18n";
@@ -104,6 +105,9 @@ export default function Home() {
 
       {/* Editor */}
       <CropEditor />
+
+      {/* Structured Data */}
+      <HomeStructuredData />
     </main>
   );
 }
