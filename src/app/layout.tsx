@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { DM_Sans, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import EditorProvider from "./components/EditorProvider";
 import LanguageProvider from "./components/LanguageProvider";
@@ -74,6 +75,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${dmSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="h-full bg-zinc-950 text-white font-sans flex flex-col">
+        {/* Google Analytics */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-TSPXQBR1RC"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-TSPXQBR1RC');
+          `}
+        </Script>
+
         <LanguageProvider>
           <EditorProvider>
             {children}
