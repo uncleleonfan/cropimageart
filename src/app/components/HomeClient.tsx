@@ -16,7 +16,7 @@ export default function HomeClient({ children }: { children: ReactNode }) {
 
   return (
     <>
-      <main className="flex-1 flex flex-col min-h-0">
+      <main className="flex-1 flex flex-col">
         {/* Header */}
         <header className="flex items-center px-5 py-3 border-b border-zinc-800/40 flex-shrink-0 bg-zinc-950/80 backdrop-blur-xl">
           {/* Left: Logo */}
@@ -107,13 +107,13 @@ export default function HomeClient({ children }: { children: ReactNode }) {
 
         {/* Editor */}
         <CropEditor />
+
+        {/* SEO content (passed as children from page.tsx) */}
+        {children}
+
+        {/* Structured Data */}
+        <HomeStructuredData />
       </main>
-
-      {/* Server-rendered content (passed as children from page.tsx) */}
-      {children}
-
-      {/* Structured Data */}
-      <HomeStructuredData />
     </>
   );
 }
