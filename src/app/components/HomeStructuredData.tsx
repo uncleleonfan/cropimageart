@@ -7,7 +7,7 @@ export default function HomeStructuredData() {
           "@context": "https://schema.org",
           "@type": "WebApplication",
           name: "CropImageArt",
-          url: "https://cropimageart.vercel.app",
+          url: "https://cropimage.art",
           description:
             "Free online image cropping tool with professional composition guides including Rule of Thirds, Golden Ratio, and more. All processing happens locally in your browser.",
           applicationCategory: "MultimediaApplication",

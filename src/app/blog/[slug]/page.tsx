@@ -66,7 +66,7 @@ export default function BlogPostPage() {
               },
               mainEntityOfPage: {
                 "@type": "WebPage",
-                "@id": `https://cropimageart.vercel.app/blog/${post.slug}`,
+                "@id": `https://cropimage.art/blog/${post.slug}`,
               },
             }),
           }}

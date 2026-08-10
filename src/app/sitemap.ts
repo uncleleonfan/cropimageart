@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { blogPosts } from "./lib/blog-posts";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://cropimageart.vercel.app";
+  const baseUrl = "https://cropimage.art";
 
   const staticRoutes: MetadataRoute.Sitemap = [
     {

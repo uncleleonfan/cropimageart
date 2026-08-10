@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/api/", "/_next/"],
       },
     ],
-    sitemap: "https://cropimageart.vercel.app/sitemap.xml",
+    sitemap: "https://cropimage.art/sitemap.xml",
   };
 }

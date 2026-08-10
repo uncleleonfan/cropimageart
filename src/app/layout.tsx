@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://cropimageart.vercel.app"),
+  metadataBase: new URL("https://cropimage.art"),
   title: {
     default: "CropImageArt — Free Online Image Cropping Tool",
     template: "%s — CropImageArt",
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     "max-video-preview": -1,
   },
   alternates: {
-    canonical: "/",
+    canonical: "https://cropimage.art",
   },
   openGraph: {
     siteName: "CropImageArt",
