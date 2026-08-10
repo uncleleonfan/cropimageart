@@ -1,0 +1,22 @@
+# CropImageArt
+> Free online image cropping tool with professional composition guides — all processing is local, no uploads needed.
+
+## About
+CropImageArt is a browser-based image cropper that overlays 8 professional composition grids (Rule of Thirds, Golden Ratio, Golden Spiral, Diagonal Method, Triangle, Center Cross, Symmetry, Leading Lines) on your photos. Supports 9 aspect ratio presets — Instagram (1:1, 4:5), YouTube thumbnails (16:9), LinkedIn (1:1), print (3:2, 4:3, 2:3), and more. Export as PNG, JPEG, or WebP.
+
+## Key Pages
+- Home: https://cropimage.art
+- Blog / Guides: https://cropimage.art/blog — step-by-step photo composition tutorials
+- Privacy Policy: https://cropimage.art/privacy
+- Terms of Service: https://cropimage.art/terms
+- About: https://cropimage.art/about
+
+## How It Works
+1. Open https://cropimage.art — no sign-up required.
+2. Upload an image or drag-and-drop.
+3. Overlay a composition grid from the toolbar.
+4. Set an aspect ratio (or keep "free").
+5. Crop, preview, and export.
+
+## Privacy
+All image processing happens locally in your browser (Canvas API + FileReader). Nothing is uploaded to any server.

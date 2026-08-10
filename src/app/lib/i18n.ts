@@ -650,6 +650,17 @@ const ui = {
     de: "Start",
     pt: "Início",
   },
+  about: {
+    en: "About",
+    "zh-CN": "关于",
+    "zh-TW": "關於",
+    ja: "概要",
+    ko: "소개",
+    es: "Acerca de",
+    fr: "À propos",
+    de: "Über",
+    pt: "Sobre",
+  },
 
   // privacy & terms
   privacy: {

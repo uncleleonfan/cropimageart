@@ -56,6 +56,12 @@ export default function Footer() {
           >
             {t(lang, "guides")}
           </Link>
+          <Link
+            href="/about"
+            className="text-zinc-400 hover:text-white transition-colors"
+          >
+            {t(lang, "about")}
+          </Link>
           <span className="text-zinc-700">|</span>
           <Link
             href="/privacy"
