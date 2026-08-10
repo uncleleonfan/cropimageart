@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CropImageArt
+
+**Crop images with professional composition guides — free, private, no upload needed.**
+
+[cropimage.art](https://cropimage.art) is an online image cropping tool that overlays professional composition grids on your photos. Everything runs locally in your browser — your images never leave your device.
+
+## Features
+
+- **8 Composition Grids** — Rule of Thirds, Golden Ratio, Golden Spiral, Diagonal Method, Triangle, Center Cross, Symmetry, Leading Lines
+- **9 Aspect Ratio Presets** — Free, 1:1 Square, 4:5/3:4/9:16 for Instagram and Stories, 16:9 for video, plus standard print ratios
+- **Rotate & Scale** — Fine-tune your crop with rotation and zoom controls
+- **Multiple Export Formats** — PNG (lossless), JPEG, WebP
+- **Share Directly** — Web Share API integration for mobile
+- **9 Languages** — English, 简体中文, 繁體中文, 日本語, 한국어, Español, Français, Deutsch, Português
+- **100% Private** — All processing happens via Canvas API in your browser. No server uploads, no account required, no watermarks.
+
+## Tech Stack
+
+- [Next.js 16](https://nextjs.org) (App Router)
+- [React 19](https://react.dev)
+- [TypeScript](https://www.typescriptlang.org)
+- [Tailwind CSS v4](https://tailwindcss.com)
+- Deployed on [Vercel](https://vercel.com)
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+# Install dependencies
+npm install
+
+# Start dev server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Build for production
+npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## How It Works
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+All image processing runs locally using the browser's built-in Canvas API and FileReader. When you select an image:
 
-## Learn More
+1. The image is loaded into an offscreen canvas
+2. Composition grid overlays are rendered on top
+3. You adjust the crop, rotation, and scale
+4. Export renders the final cropped region to a new canvas
 
-To learn more about Next.js, take a look at the following resources:
+No data is ever sent to a server. You can verify this by disconnecting your internet after the page loads — everything keeps working.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Contributing
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Issues and pull requests are welcome. For major changes, please open an issue first to discuss what you'd like to change.
 
-## Deploy on Vercel
+## License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+MIT
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+Made with ❤️ — [cropimage.art](https://cropimage.art)
