@@ -495,7 +495,7 @@ export default function CropEditor() {
   if (!imageSrc || !image) {
     return (
       <div
-        className="min-h-[calc(100vh-420px)] flex items-center justify-center"
+        className="flex-1 flex items-center justify-center"
         onDrop={handleDrop}
         onDragOver={(e) => e.preventDefault()}
       >
