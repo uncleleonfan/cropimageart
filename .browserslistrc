@@ -1,0 +1,2 @@
+# Target modern browsers only — avoid legacy JavaScript polyfills
+defaults and (> 0.2% or last 2 versions) and not dead and supports es6-module
