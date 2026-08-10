@@ -16,7 +16,7 @@ const HANDLE_SIZE = 16; // pixel hit area for resize handles
 
 export default function CropEditor() {
   const { lang } = useLang();
-  const { imageSrc, setImageSrc, composition, setComposition, aspectRatio, setAspectRatio, imageRef: ctxImageRef } = useEditor();
+  const { imageSrc, setImageSrc, composition, setComposition, aspectRatio, setAspectRatio, customRatio, setCustomRatio, imageRef: ctxImageRef } = useEditor();
   const [image, setImage] = useState<HTMLImageElement | null>(null);
   const [displayW, setDisplayW] = useState(0);
   const [displayH, setDisplayH] = useState(0);
@@ -42,7 +42,10 @@ export default function CropEditor() {
   const cropWRef = useRef<HTMLInputElement>(null);
   const cropHRef = useRef<HTMLInputElement>(null);
 
-  const ratio = aspectRatio === "free" ? null : ASPECT_RATIO_VALUES[aspectRatio];
+  const ratio =
+    aspectRatio === "free" ? null
+      : aspectRatio === "custom" ? customRatio
+        : ASPECT_RATIO_VALUES[aspectRatio as Exclude<AspectRatio, "free" | "custom">];
 
   // ---- Recalc display on window resize ----
   useEffect(() => {
@@ -171,8 +174,9 @@ export default function CropEditor() {
   useEffect(() => {
     if (!initialized || displayW === 0 || displayH === 0) return;
     if (aspectRatio === "free") return;
+    if (aspectRatio === "custom" && !customRatio) return;
 
-    const r = ASPECT_RATIO_VALUES[aspectRatio as Exclude<AspectRatio, "free">];
+    const r = aspectRatio === "custom" ? customRatio! : ASPECT_RATIO_VALUES[aspectRatio as Exclude<AspectRatio, "free" | "custom">];
     setCrop((prev) => {
       const maxW = displayW - prev.x;
       const maxH = displayH - prev.y;
@@ -185,7 +189,7 @@ export default function CropEditor() {
       return { ...prev, width: Math.round(w), height: Math.round(h) };
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [aspectRatio]);
+  }, [aspectRatio, customRatio]);
 
   // ---- Scale factor ----
   const getScale = useCallback(() => {

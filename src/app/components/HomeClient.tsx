@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import CropEditor from "./CropEditor";
 import HomeStructuredData from "./HomeStructuredData";
@@ -12,7 +13,17 @@ import type { ReactNode } from "react";
 
 export default function HomeClient({ children }: { children: ReactNode }) {
   const { lang, setLang } = useLang();
-  const { imageSrc, aspectRatio, setAspectRatio } = useEditor();
+  const { imageSrc, aspectRatio, setAspectRatio, customRatio, setCustomRatio } = useEditor();
+  const [customW, setCustomW] = useState(customRatio ? String(Math.round(customRatio * 100)) : "16");
+  const [customH, setCustomH] = useState(customRatio ? "100" : "9");
+
+  const applyCustomRatio = (w: string, h: string) => {
+    const nw = parseFloat(w);
+    const nh = parseFloat(h);
+    if (nw > 0 && nh > 0) {
+      setCustomRatio(nw / nh);
+    }
+  };
 
   return (
     <>
@@ -82,7 +93,7 @@ export default function HomeClient({ children }: { children: ReactNode }) {
           {imageSrc && (
             <div className="flex items-center justify-start overflow-x-auto w-full gap-1.5 sm:justify-center no-scrollbar">
               <span className="text-[11px] text-zinc-500 uppercase tracking-widest font-medium flex-shrink-0">{t(lang, "ratio")}</span>
-              <div className="flex gap-0.5 bg-zinc-900 rounded-lg p-0.5">
+              <div className="flex items-center gap-0.5 bg-zinc-900 rounded-lg p-0.5">
                 {([
                   ["free", "Free"],
                   ["1:1", "1:1"],
@@ -93,19 +104,65 @@ export default function HomeClient({ children }: { children: ReactNode }) {
                   ["16:9", "16:9"],
                   ["4:3", "4:3"],
                   ["3:2", "3:2"],
-                ] as [AspectRatio, string][]).map(([key]) => (
-                  <button
-                    key={key}
-                    onClick={() => setAspectRatio(key)}
-                    className={`text-[12px] sm:text-[13px] px-1.5 sm:px-2 py-1 rounded-md transition-colors whitespace-nowrap ${
-                      aspectRatio === key
-                        ? "bg-white text-black font-medium"
-                        : "text-zinc-400 hover:text-white hover:bg-zinc-800"
-                    }`}
-                  >
-                    {ASPECT_RATIO_LABELS[lang]?.[key] || key}
-                  </button>
-                ))}
+                  ["custom", "…"],
+                ] as [AspectRatio, string][]).map(([key, label]) => {
+                  if (key === "custom") {
+                    return (
+                      <span key={key} className="flex items-center gap-0.5">
+                        {aspectRatio !== "custom" ? (
+                          <button
+                            onClick={() => {
+                              setAspectRatio("custom");
+                              applyCustomRatio(customW, customH);
+                            }}
+                            className="text-[12px] sm:text-[13px] px-1.5 sm:px-2 py-1 rounded-md transition-colors whitespace-nowrap text-zinc-400 hover:text-white hover:bg-zinc-800"
+                          >
+                            {label}
+                          </button>
+                        ) : (
+                          <span className="flex items-center gap-0.5 px-1">
+                            <input
+                              type="number"
+                              min={1}
+                              value={customW}
+                              onChange={(e) => {
+                                setCustomW(e.target.value);
+                                applyCustomRatio(e.target.value, customH);
+                              }}
+                              onBlur={() => applyCustomRatio(customW, customH)}
+                              className="w-9 text-center text-black bg-white rounded text-[11px] py-0.5 outline-none [-moz-appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                            />
+                            <span className="text-zinc-400 text-[11px]">:</span>
+                            <input
+                              type="number"
+                              min={1}
+                              value={customH}
+                              onChange={(e) => {
+                                setCustomH(e.target.value);
+                                applyCustomRatio(customW, e.target.value);
+                              }}
+                              onBlur={() => applyCustomRatio(customW, customH)}
+                              className="w-9 text-center text-black bg-white rounded text-[11px] py-0.5 outline-none [-moz-appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                            />
+                          </span>
+                        )}
+                      </span>
+                    );
+                  }
+                  return (
+                    <button
+                      key={key}
+                      onClick={() => setAspectRatio(key)}
+                      className={`text-[12px] sm:text-[13px] px-1.5 sm:px-2 py-1 rounded-md transition-colors whitespace-nowrap ${
+                        aspectRatio === key
+                          ? "bg-white text-black font-medium"
+                          : "text-zinc-400 hover:text-white hover:bg-zinc-800"
+                      }`}
+                    >
+                      {ASPECT_RATIO_LABELS[lang]?.[key] || key}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}

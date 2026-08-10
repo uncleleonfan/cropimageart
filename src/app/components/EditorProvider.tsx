@@ -10,6 +10,8 @@ type EditorContextValue = {
   setComposition: (c: CompositionType) => void;
   aspectRatio: AspectRatio;
   setAspectRatio: (r: AspectRatio) => void;
+  customRatio: number | null;
+  setCustomRatio: (r: number | null) => void;
   // We use a ref for the live Image element so it survives re-renders
   imageRef: React.MutableRefObject<HTMLImageElement | null>;
 };
@@ -26,6 +28,7 @@ export default function EditorProvider({ children }: { children: React.ReactNode
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [composition, setComposition] = useState<CompositionType>("thirds");
   const [aspectRatio, setAspectRatio] = useState<AspectRatio>("free");
+  const [customRatio, setCustomRatio] = useState<number | null>(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
 
   return (
@@ -37,6 +40,8 @@ export default function EditorProvider({ children }: { children: React.ReactNode
         setComposition,
         aspectRatio,
         setAspectRatio,
+        customRatio,
+        setCustomRatio,
         imageRef,
       }}
     >

@@ -1,4 +1,4 @@
-export type AspectRatio = "free" | "1:1" | "4:5" | "5:4" | "3:4" | "4:3" | "3:2" | "2:3" | "16:9" | "9:16";
+export type AspectRatio = "free" | "1:1" | "4:5" | "5:4" | "3:4" | "4:3" | "3:2" | "2:3" | "16:9" | "9:16" | "custom";
 
 export type CompositionType =
   | "none"
@@ -39,6 +39,7 @@ export const ASPECT_RATIO_LABELS: Record<AspectRatio, string> = {
   "2:3": "2:3",
   "16:9": "16:9 Video",
   "9:16": "9:16 Story",
+  custom: "Custom",
 };
 
 export const COMPOSITION_LABELS: Record<CompositionType, string> = {
@@ -53,7 +54,7 @@ export const COMPOSITION_LABELS: Record<CompositionType, string> = {
   "leading-lines": "Leading Lines",
 };
 
-export const ASPECT_RATIO_VALUES: Record<Exclude<AspectRatio, "free">, number> = {
+export const ASPECT_RATIO_VALUES: Record<Exclude<AspectRatio, "free" | "custom">, number> = {
   "1:1": 1,
   "4:5": 0.8,
   "5:4": 1.25,
