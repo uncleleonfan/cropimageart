@@ -20,11 +20,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://cropimageart.vercel.app"),
   title: {
-    default: "CropImageArt — Free Online Image Cropping Tool with Composition Guides",
+    default: "CropImageArt — Free Online Image Cropping Tool",
     template: "%s — CropImageArt",
   },
   description:
-    "Crop images beautifully with professional composition guides including Rule of Thirds, Golden Ratio, Golden Spiral, Diagonal Method, and more. Free online image cropping tool — all processing happens locally in your browser, no upload needed.",
+    "Free online image cropping tool with Rule of Thirds, Golden Ratio, and 5+ composition guides. All processing is local, no upload needed.",
   keywords: [
     "image crop",
     "composition grid",
@@ -54,9 +54,9 @@ export const metadata: Metadata = {
   },
   openGraph: {
     siteName: "CropImageArt",
-    title: "CropImageArt — Free Online Image Cropping Tool with Composition Guides",
+    title: "CropImageArt — Free Online Image Cropping Tool",
     description:
-      "Crop images beautifully with professional composition guides. Free, private, no upload needed.",
+      "Crop images with professional composition guides. Free, private, no upload needed.",
     type: "website",
     locale: "en_US",
   },
@@ -64,7 +64,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "CropImageArt — Free Online Image Cropping Tool",
     description:
-      "Crop images beautifully with professional composition guides. Free, private, no upload needed.",
+      "Crop images with professional composition guides. Free, private, no upload needed.",
   },
 };
 

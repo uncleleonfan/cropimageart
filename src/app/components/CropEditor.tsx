@@ -505,15 +505,41 @@ export default function CropEditor() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
             </svg>
           </div>
-          <h2 className="text-2xl font-semibold text-white mb-4 tracking-tight">
+          <h2 className="text-2xl font-semibold text-white mb-3 tracking-tight">
             {t(lang, "uploadTitle")}
           </h2>
-          <p className="text-zinc-400 mb-2 text-base">
+          <p className="text-zinc-400 mb-8 text-base">
             {t(lang, "uploadDesc")}
           </p>
-          <p className="text-zinc-500 mb-8 text-sm leading-relaxed max-w-xs mx-auto">
-            {t(lang, "uploadHint")}
-          </p>
+
+          {/* Features */}
+          <div className="grid gap-5 mb-8 text-left">
+            <div>
+              <h3 className="text-[13px] font-semibold text-white mb-1">
+                {t(lang, "featureGuide")}
+              </h3>
+              <p className="text-[12px] text-zinc-500 leading-relaxed">
+                {t(lang, "featureGuideBody")}
+              </p>
+            </div>
+            <div>
+              <h3 className="text-[13px] font-semibold text-white mb-1">
+                {t(lang, "featurePrivate")}
+              </h3>
+              <p className="text-[12px] text-zinc-500 leading-relaxed">
+                {t(lang, "featurePrivateBody")}
+              </p>
+            </div>
+            <div>
+              <h3 className="text-[13px] font-semibold text-white mb-1">
+                {t(lang, "featureFree")}
+              </h3>
+              <p className="text-[12px] text-zinc-500 leading-relaxed">
+                {t(lang, "featureFreeBody")}
+              </p>
+            </div>
+          </div>
+
           <button
             onClick={() => fileInputRef.current?.click()}
             className="px-7 py-3 bg-white text-black rounded-full font-medium text-base hover:bg-zinc-200 transition-colors"
