@@ -104,7 +104,7 @@ export default function HomeClient({ children }: { children: ReactNode }) {
                   ["16:9", "16:9"],
                   ["4:3", "4:3"],
                   ["3:2", "3:2"],
-                  ["custom", "…"],
+                  ["custom", "Custom"],
                 ] as [AspectRatio, string][]).map(([key, label]) => {
                   if (key === "custom") {
                     return (
