@@ -18,20 +18,8 @@ export default function Footer() {
         {/* Left: Brand + Copyright */}
         <div className="flex items-center gap-3 text-zinc-500 min-w-0">
           <Link href="/" className="flex items-center gap-2 shrink-0 group">
-            <div className="w-5 h-5 rounded-md bg-gradient-to-br from-violet-500 via-purple-500 to-pink-500 flex items-center justify-center shadow-sm shadow-purple-500/15 group-hover:shadow-purple-500/30 transition-shadow">
-              <svg
-                className="w-2.5 h-2.5 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={1.8}
-                  d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
-                />
-              </svg>
+            <div className="w-5 h-5 rounded-md flex items-center justify-center overflow-hidden group-hover:scale-110 transition-transform">
+              <img src="/icon.png" alt="CropImageArt" className="w-full h-full object-contain" />
             </div>
             <span className="text-[13px] font-semibold text-white tracking-tight">
               {t(lang, "siteName")}

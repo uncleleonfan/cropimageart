@@ -500,10 +500,8 @@ export default function CropEditor() {
         onDragOver={(e) => e.preventDefault()}
       >
         <div className="text-center max-w-md mx-auto px-6">
-          <div className="mx-auto mb-8 w-24 h-24 rounded-3xl bg-gradient-to-br from-purple-600/20 to-pink-600/20 border border-purple-500/20 flex items-center justify-center">
-            <svg className="w-12 h-12 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-            </svg>
+          <div className="mx-auto mb-8 w-24 h-24 rounded-3xl flex items-center justify-center">
+            <img src="/icon.png" alt="CropImageArt" className="w-full h-full object-contain" />
           </div>
           <h2 className="text-2xl font-semibold text-white mb-3 tracking-tight">
             {t(lang, "uploadTitle")}
