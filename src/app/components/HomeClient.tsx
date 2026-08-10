@@ -16,7 +16,7 @@ export default function HomeClient({ children }: { children: ReactNode }) {
 
   return (
     <>
-      <main className={imageSrc ? "flex-1 flex flex-col min-h-0" : "flex flex-col"}>
+      <main className="flex-1 flex flex-col min-h-0">
         {/* Header */}
         <header className="flex items-center px-5 py-3 border-b border-zinc-800/40 flex-shrink-0 bg-zinc-950/80 backdrop-blur-xl">
           {/* Left: Logo */}

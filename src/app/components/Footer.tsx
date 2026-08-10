@@ -14,9 +14,9 @@ export default function Footer() {
 
   return (
     <footer className="border-t border-zinc-800/40 bg-zinc-950/90 backdrop-blur-xl">
-      <div className="max-w-5xl mx-auto px-6 py-3.5 flex items-center justify-between gap-4 text-[12px]">
-        {/* Left: Brand + Copyright */}
-        <div className="flex items-center gap-3 text-zinc-500 min-w-0">
+      <div className="max-w-5xl mx-auto px-5 py-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-between sm:py-3.5 text-[12px]">
+        {/* Top row on mobile: Brand + Copyright */}
+        <div className="flex items-center gap-3 text-zinc-500">
           <Link href="/" className="flex items-center gap-2 shrink-0 group">
             <div className="w-5 h-5 rounded-md flex items-center justify-center overflow-hidden group-hover:scale-110 transition-transform">
               <img src="/icon.png" alt="CropImageArt" className="w-full h-full object-contain" />
@@ -25,13 +25,13 @@ export default function Footer() {
               {t(lang, "siteName")}
             </span>
           </Link>
-          <span className="hidden sm:inline text-zinc-600">
+          <span className="text-zinc-600">
             &copy; {new Date().getFullYear()}
           </span>
         </div>
 
         {/* Center: Links */}
-        <div className="flex items-center gap-4 shrink-0">
+        <div className="flex items-center gap-3 sm:gap-4 flex-wrap justify-center">
           <Link
             href="/"
             className="text-zinc-400 hover:text-white transition-colors"
@@ -50,7 +50,7 @@ export default function Footer() {
           >
             {t(lang, "about")}
           </Link>
-          <span className="text-zinc-700">|</span>
+          <span className="hidden sm:inline text-zinc-700">|</span>
           <Link
             href="/privacy"
             className="text-zinc-500 hover:text-zinc-300 transition-colors"
@@ -65,8 +65,8 @@ export default function Footer() {
           </Link>
         </div>
 
-        {/* Right: Contact */}
-        <div className="flex items-center gap-1.5 text-zinc-500 shrink-0">
+        {/* Bottom row on mobile: Contact */}
+        <div className="flex items-center gap-1.5 text-zinc-500">
           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
           </svg>
