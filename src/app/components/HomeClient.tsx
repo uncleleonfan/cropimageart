@@ -109,8 +109,8 @@ export default function HomeClient({ children }: { children: ReactNode }) {
         <CropEditor />
       </main>
 
-      {/* SEO content (passed as children from page.tsx) — below the fold */}
-      {children}
+      {/* SEO content — only on homepage (no image loaded) */}
+      {!imageSrc && children}
 
       {/* Structured Data */}
       <HomeStructuredData />
