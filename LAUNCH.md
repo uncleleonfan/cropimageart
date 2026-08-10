@@ -65,6 +65,8 @@ PS: Works on mobile too — try the pinch-to-zoom gesture.
 
 ```
 Indie hacker building useful web tools. Previously built [other projects]. Love clean UI, performance, and privacy-first software.
+
+Follow me on X: @[your-handle]
 ```
 
 ---
@@ -83,7 +85,7 @@ Indie hacker building useful web tools. Previously built [other projects]. Love 
 - [ ] 确认网站 https://cropimage.art 正常
 - [ ] 确认 Vercel 没有限流
 - [ ] GitHub README 最新
-- [ ] Twitter/X 准备一条 announcement 帖
+- [ ] Twitter/X 准备一条 announcement 帖（个人账号 @[your-handle]）
 - [ ] Reddit r/webdev / r/internetisbeautiful 帖子草稿就绪
 - [ ] 设置 Google Analytics 实时查看流量
 
