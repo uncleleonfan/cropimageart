@@ -190,6 +190,54 @@ export default function CropEditor() {
     return imgW / displayW;
   }, [image, displayW, rotation]);
 
+  // ---- Handle crop size input ----
+  const handleCropSizeChange = useCallback(
+    (dim: "w" | "h", value: string) => {
+      const num = parseInt(value, 10);
+      if (isNaN(num) || num <= 0 || displayW === 0 || displayH === 0) return;
+
+      const scale = getScale();
+      const maxOrigW = image ? (rotation % 180 === 0 ? image.naturalWidth : image.naturalHeight) : displayW * scale;
+      const maxOrigH = image ? (rotation % 180 === 0 ? image.naturalHeight : image.naturalWidth) : displayH * scale;
+
+      let newDisplayW: number, newDisplayH: number;
+
+      if (dim === "w") {
+        const clamped = Math.max(MIN_CROP, Math.min(num, Math.round(maxOrigW)));
+        newDisplayW = clamped / scale;
+        if (ratio) {
+          newDisplayH = newDisplayW / ratio;
+        } else {
+          newDisplayH = crop.height;
+        }
+      } else {
+        const clamped = Math.max(MIN_CROP, Math.min(num, Math.round(maxOrigH)));
+        newDisplayH = clamped / scale;
+        if (ratio) {
+          newDisplayW = newDisplayH * ratio;
+        } else {
+          newDisplayW = crop.width;
+        }
+      }
+
+      // Clamp to display bounds
+      newDisplayW = Math.min(newDisplayW, displayW);
+      newDisplayH = Math.min(newDisplayH, displayH);
+
+      // Keep crop centered within bounds
+      const newX = Math.max(0, Math.min(crop.x, displayW - newDisplayW));
+      const newY = Math.max(0, Math.min(crop.y, displayH - newDisplayH));
+
+      setCrop({
+        x: Math.round(newX),
+        y: Math.round(newY),
+        width: Math.round(newDisplayW),
+        height: Math.round(newDisplayH),
+      });
+    },
+    [displayW, displayH, getScale, ratio, crop, image, rotation]
+  );
+
   // ---- Position helpers (mouse + touch) ----
   const getPos = useCallback((clientX: number, clientY: number) => {
     const target = imageBoxRef.current || containerRef.current;
@@ -655,9 +703,27 @@ export default function CropEditor() {
               {image.naturalWidth} × {image.naturalHeight}
               <span className="text-zinc-600">·</span>
               <span className="text-zinc-500">{t(lang, "cropSize")}</span>
-              <span className="inline-block w-[72px] text-white">
-                {initialized ? `${Math.round(crop.width * getScale())} × ${Math.round(crop.height * getScale())}` : '—'}
-              </span>
+              {initialized ? (
+                <span className="inline-flex items-center gap-0.5 pointer-events-auto">
+                  <input
+                    type="number"
+                    min={MIN_CROP}
+                    value={Math.round(crop.width * getScale())}
+                    onChange={(e) => handleCropSizeChange("w", e.target.value)}
+                    className="w-[52px] text-center text-white bg-white/10 rounded px-1 py-0 text-[12px] outline-none focus:bg-white/20 [-moz-appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                  />
+                  <span className="text-zinc-500">×</span>
+                  <input
+                    type="number"
+                    min={MIN_CROP}
+                    value={Math.round(crop.height * getScale())}
+                    onChange={(e) => handleCropSizeChange("h", e.target.value)}
+                    className="w-[52px] text-center text-white bg-white/10 rounded px-1 py-0 text-[12px] outline-none focus:bg-white/20 [-moz-appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                  />
+                </span>
+              ) : (
+                <span className="text-white">—</span>
+              )}
             </span>
           </div>
         )}
