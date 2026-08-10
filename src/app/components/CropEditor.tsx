@@ -31,12 +31,16 @@ export default function CropEditor() {
   const [activeHandle, setActiveHandle] = useState<ResizeHandle | null>(null);
   const [isPreviewing, setIsPreviewing] = useState(false);
   const [previewSrc, setPreviewSrc] = useState<string | null>(null);
+  const [cropWInput, setCropWInput] = useState("");
+  const [cropHInput, setCropHInput] = useState("");
 
   const containerRef = useRef<HTMLDivElement>(null);
   const imageBoxRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const originalImageRef = useRef<HTMLImageElement | null>(null);
   const originalSrcRef = useRef<string | null>(null);
+  const cropWRef = useRef<HTMLInputElement>(null);
+  const cropHRef = useRef<HTMLInputElement>(null);
 
   const ratio = aspectRatio === "free" ? null : ASPECT_RATIO_VALUES[aspectRatio];
 
@@ -189,6 +193,18 @@ export default function CropEditor() {
     const imgW = rotation % 180 === 0 ? image.naturalWidth : image.naturalHeight;
     return imgW / displayW;
   }, [image, displayW, rotation]);
+
+  // ---- Sync crop size inputs when crop changes (but not while user is typing) ----
+  useEffect(() => {
+    if (!initialized || displayW === 0) return;
+    const scale = getScale();
+    if (document.activeElement !== cropWRef.current) {
+      setCropWInput(String(Math.round(crop.width * scale)));
+    }
+    if (document.activeElement !== cropHRef.current) {
+      setCropHInput(String(Math.round(crop.height * scale)));
+    }
+  }, [crop.width, crop.height, getScale, initialized, displayW]);
 
   // ---- Handle crop size input ----
   const handleCropSizeChange = useCallback(
@@ -707,17 +723,23 @@ export default function CropEditor() {
                 <span className="inline-flex items-center gap-0.5 pointer-events-auto">
                   <input
                     type="number"
+                    ref={cropWRef}
                     min={MIN_CROP}
-                    value={Math.round(crop.width * getScale())}
-                    onChange={(e) => handleCropSizeChange("w", e.target.value)}
+                    value={cropWInput}
+                    onChange={(e) => setCropWInput(e.target.value)}
+                    onBlur={() => handleCropSizeChange("w", cropWInput)}
+                    onKeyDown={(e) => { if (e.key === "Enter") handleCropSizeChange("w", cropWInput); }}
                     className="w-[52px] text-center text-white bg-white/10 rounded px-1 py-0 text-[12px] outline-none focus:bg-white/20 [-moz-appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                   />
                   <span className="text-zinc-500">×</span>
                   <input
                     type="number"
+                    ref={cropHRef}
                     min={MIN_CROP}
-                    value={Math.round(crop.height * getScale())}
-                    onChange={(e) => handleCropSizeChange("h", e.target.value)}
+                    value={cropHInput}
+                    onChange={(e) => setCropHInput(e.target.value)}
+                    onBlur={() => handleCropSizeChange("h", cropHInput)}
+                    onKeyDown={(e) => { if (e.key === "Enter") handleCropSizeChange("h", cropHInput); }}
                     className="w-[52px] text-center text-white bg-white/10 rounded px-1 py-0 text-[12px] outline-none focus:bg-white/20 [-moz-appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                   />
                 </span>
