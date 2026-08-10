@@ -91,6 +91,7 @@ export default function HomeClient({ children }: { children: ReactNode }) {
 
             {/* Language switcher */}
             <select
+              aria-label="Select language"
               value={lang}
               onChange={(e) => setLang(e.target.value as LangCode)}
               className="text-[12px] bg-zinc-800/60 text-zinc-300 rounded-full px-2.5 py-1.5 border border-zinc-700/40 focus:outline-none focus:border-zinc-500 appearance-none cursor-pointer hover:bg-zinc-700/60 transition-colors"
