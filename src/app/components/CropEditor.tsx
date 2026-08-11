@@ -7,6 +7,7 @@ import CompositionGrid from "./CompositionGrid";
 import { useEditor } from "./EditorProvider";
 import { useLang } from "./LanguageProvider";
 import { t, COMPOSITION_LABELS, ASPECT_RATIO_LABELS } from "../lib/i18n";
+import { trackUpload, trackComposition, trackZoom, trackRotate, trackCropSize, trackPreview, trackExport, trackReset } from "../lib/analytics";
 
 type ResizeHandle = "nw" | "n" | "ne" | "e" | "se" | "s" | "sw" | "w";
 
@@ -75,6 +76,7 @@ export default function CropEditor() {
       const src = e.target?.result as string;
       const img = new Image();
       img.onload = () => {
+        trackUpload();
         setImage(img);
         setImageSrc(src);
         ctxImageRef.current = img;
@@ -458,6 +460,8 @@ export default function CropEditor() {
     const canvas = generateExportCanvas();
     if (!canvas) return;
 
+    trackExport(format, canvas.width, canvas.height);
+
     const ext = format === "jpeg" ? "jpg" : format;
     const mime = format === "jpeg" ? "image/jpeg" : `image/${format}`;
     const quality = format === "png" ? undefined : 0.92;
@@ -546,6 +550,7 @@ export default function CropEditor() {
 
   // ---- Reset to original image ----
   const handleReset = useCallback(() => {
+    trackReset();
     const origImg = originalImageRef.current;
     const origSrc = originalSrcRef.current;
     if (origImg && origSrc) {
@@ -638,7 +643,7 @@ export default function CropEditor() {
           {Object.entries(COMPOSITION_LABELS.en).map(([key]) => (
             <button
               key={key}
-              onClick={() => setComposition(key as CompositionType)}
+              onClick={() => { setComposition(key as CompositionType); trackComposition(key); }}
               className={`text-[13px] px-2.5 py-1 rounded-md transition-colors whitespace-nowrap ${
                 composition === key
                   ? "bg-white text-black font-medium"
@@ -653,19 +658,19 @@ export default function CropEditor() {
         {/* Zoom */}
         <div className="flex items-center gap-1 text-xs text-zinc-400">
           <button
-            onClick={() => setZoom((z) => Math.max(0.25, +(z - 0.25).toFixed(2)))}
+            onClick={() => setZoom((z) => { const nz = Math.max(0.25, +(z - 0.25).toFixed(2)); trackZoom("out", nz); return nz; })}
             className="w-6 h-6 rounded flex items-center justify-center hover:bg-zinc-800 hover:text-white transition-colors"
           >−</button>
           <span className="w-10 text-center tabular-nums text-[13px]">{Math.round(zoom * 100)}%</span>
           <button
-            onClick={() => setZoom((z) => Math.min(1, +(z + 0.25).toFixed(2)))}
+            onClick={() => setZoom((z) => { const nz = Math.min(1, +(z + 0.25).toFixed(2)); trackZoom("in", nz); return nz; })}
             className="w-6 h-6 rounded flex items-center justify-center hover:bg-zinc-800 hover:text-white transition-colors"
           >+</button>
         </div>
 
         {/* Rotate */}
         <button
-          onClick={() => setRotation((r) => (r + 90) % 360)}
+          onClick={() => setRotation((r) => { const nr = (r + 90) % 360; trackRotate(nr); return nr; })}
           className="flex items-center gap-1 text-[13px] text-zinc-400 hover:text-white px-2 py-1.5 rounded-lg hover:bg-zinc-800 transition-colors"
         >
           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -731,8 +736,8 @@ export default function CropEditor() {
                     min={MIN_CROP}
                     value={cropWInput}
                     onChange={(e) => setCropWInput(e.target.value)}
-                    onBlur={() => handleCropSizeChange("w", cropWInput)}
-                    onKeyDown={(e) => { if (e.key === "Enter") handleCropSizeChange("w", cropWInput); }}
+                    onBlur={() => { const v = parseInt(cropWInput, 10); if (v > 0) trackCropSize("width", v); handleCropSizeChange("w", cropWInput); }}
+                    onKeyDown={(e) => { if (e.key === "Enter") { const v = parseInt(cropWInput, 10); if (v > 0) trackCropSize("width", v); handleCropSizeChange("w", cropWInput); } }}
                     className="w-[52px] text-center text-white bg-white/10 rounded px-1 py-0 text-[12px] outline-none focus:bg-white/20 [-moz-appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                   />
                   <span className="text-zinc-500">×</span>
@@ -742,8 +747,8 @@ export default function CropEditor() {
                     min={MIN_CROP}
                     value={cropHInput}
                     onChange={(e) => setCropHInput(e.target.value)}
-                    onBlur={() => handleCropSizeChange("h", cropHInput)}
-                    onKeyDown={(e) => { if (e.key === "Enter") handleCropSizeChange("h", cropHInput); }}
+                    onBlur={() => { const v = parseInt(cropHInput, 10); if (v > 0) trackCropSize("height", v); handleCropSizeChange("h", cropHInput); }}
+                    onKeyDown={(e) => { if (e.key === "Enter") { const v = parseInt(cropHInput, 10); if (v > 0) trackCropSize("height", v); handleCropSizeChange("h", cropHInput); } }}
                     className="w-[52px] text-center text-white bg-white/10 rounded px-1 py-0 text-[12px] outline-none focus:bg-white/20 [-moz-appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                   />
                 </span>
@@ -857,7 +862,7 @@ export default function CropEditor() {
               </button>
             ) : (
               <button
-                onClick={() => setIsPreviewing(true)}
+                onClick={() => { setIsPreviewing(true); trackPreview(); }}
                 className="pointer-events-auto flex items-center gap-1.5 text-[13px] font-medium bg-white text-black px-3.5 py-1.5 rounded-full hover:bg-zinc-200 transition-all shadow-lg shadow-black/30"
               >
                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

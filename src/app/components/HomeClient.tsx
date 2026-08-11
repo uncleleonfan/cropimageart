@@ -7,6 +7,7 @@ import HomeStructuredData from "./HomeStructuredData";
 import { useLang } from "./LanguageProvider";
 import { useEditor } from "./EditorProvider";
 import { t, ASPECT_RATIO_LABELS, LANGUAGES } from "../lib/i18n";
+import { trackRatioSelect, trackCustomRatio } from "../lib/analytics";
 import type { LangCode } from "../lib/i18n";
 import type { AspectRatio } from "../lib/types";
 import type { ReactNode } from "react";
@@ -114,6 +115,7 @@ export default function HomeClient({ children }: { children: ReactNode }) {
                             onClick={() => {
                               setAspectRatio("custom");
                               applyCustomRatio(customW, customH);
+                              trackCustomRatio(customW, customH);
                             }}
                             className="text-[12px] sm:text-[13px] px-1.5 sm:px-2 py-1 rounded-md transition-colors whitespace-nowrap text-zinc-400 hover:text-white hover:bg-zinc-800"
                           >
@@ -129,7 +131,7 @@ export default function HomeClient({ children }: { children: ReactNode }) {
                                 setCustomW(e.target.value);
                                 applyCustomRatio(e.target.value, customH);
                               }}
-                              onBlur={() => applyCustomRatio(customW, customH)}
+                              onBlur={() => { applyCustomRatio(customW, customH); trackCustomRatio(customW, customH); }}
                               className="w-9 text-center text-black bg-white rounded text-[11px] py-0.5 outline-none [-moz-appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                             />
                             <span className="text-zinc-400 text-[11px]">:</span>
@@ -141,7 +143,7 @@ export default function HomeClient({ children }: { children: ReactNode }) {
                                 setCustomH(e.target.value);
                                 applyCustomRatio(customW, e.target.value);
                               }}
-                              onBlur={() => applyCustomRatio(customW, customH)}
+                              onBlur={() => { applyCustomRatio(customW, customH); trackCustomRatio(customW, customH); }}
                               className="w-9 text-center text-black bg-white rounded text-[11px] py-0.5 outline-none [-moz-appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                             />
                           </span>
@@ -152,7 +154,7 @@ export default function HomeClient({ children }: { children: ReactNode }) {
                   return (
                     <button
                       key={key}
-                      onClick={() => setAspectRatio(key)}
+                      onClick={() => { setAspectRatio(key); trackRatioSelect(key); }}
                       className={`text-[12px] sm:text-[13px] px-1.5 sm:px-2 py-1 rounded-md transition-colors whitespace-nowrap ${
                         aspectRatio === key
                           ? "bg-white text-black font-medium"
